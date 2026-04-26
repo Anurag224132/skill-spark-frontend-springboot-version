@@ -1,6 +1,7 @@
 // src/components/job/JobDetails.js
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import { useParams } from 'react-router-dom';
 const JobDetails = ({ jobId, onClose }) => {
@@ -66,7 +67,7 @@ const JobDetails = ({ jobId, onClose }) => {
                 setIsLoading(true);
 
                 // Fetch job details
-                const jobRes = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/jobs/${jobId}`);
+                const jobRes = await api.get(`/api/jobs/${jobId}`);
                 // Spring Boot backend returns the job directly
                 setJob(jobRes.data);
 
@@ -74,11 +75,8 @@ const JobDetails = ({ jobId, onClose }) => {
                 if (currentUser) {
                     try {
                         console.log('Checking application for jobId:', jobId);
-                        const appRes = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/applications/check`, {
-                            params: { jobId },
-                            headers: {
-                                Authorization: `Bearer ${localStorage.getItem('token')}`
-                            }
+                        const appRes = await api.get('/api/applications/check', {
+                            params: { jobId }
                         });
 
                         if (appRes.data) {
@@ -106,24 +104,16 @@ const JobDetails = ({ jobId, onClose }) => {
             const token = localStorage.getItem('token');
 
             // First calculate fit score
-            const fitRes = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/applications/calculate-fit`, {
+            const fitRes = await api.post('/api/applications/calculate-fit', {
                 resumeSkills: currentUser.skills || [],
                 jobId: jobId
-            }, {
-                headers: { Authorization: `Bearer ${token}` }
             });
 
             // Then submit application
-            const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/applications`,
+            const res = await api.post('/api/applications',
                 {
                     jobId: jobId,
                     fitScore: fitRes.data.score
-                },
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json'
-                    }
                 }
             );
 

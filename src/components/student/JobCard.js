@@ -94,9 +94,10 @@ const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore }) =>
 
   const togglePopup = (e) => {
     e.stopPropagation();
-    setShowPopup(!showPopup);
-    if (!showPopup) { // Only track when opening
-       handleViewJob();
+    if (typeof onJobClick === 'function') {
+      onJobClick(job);
+    } else {
+      setShowPopup(!showPopup);
     }
   };
 
