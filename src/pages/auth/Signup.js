@@ -109,10 +109,12 @@ const Signup = () => {
             </svg>
           </div>
           <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
-            {step === 'register' ? 'Join Our Platform' : 'Verify Your Email'}
+            {step === 'register' ? 'Join SkillSpark Today' : 'Verify Your Email'}
           </h2>
-          <p className="text-gray-400">
-            {step === 'register' ? 'Create your account and get started' : `Enter the OTP sent to ${email}`}
+          <p className="text-gray-400 text-sm max-w-sm mx-auto mt-2 leading-relaxed">
+            {step === 'register' 
+              ? 'Create an account to unlock personalized career opportunities, smart tracking, and intelligent skill analytics.' 
+              : `We've sent a 6-digit verification code to ${email}`}
           </p>
         </div>
 

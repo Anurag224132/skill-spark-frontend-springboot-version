@@ -59,7 +59,9 @@ const Login = () => {
           <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
             Welcome Back
           </h2>
-          <p className="text-gray-400">Sign in to your account</p>
+          <p className="text-gray-400 text-sm max-w-sm mx-auto mt-2">
+            Sign in to continue exploring AI-driven job matches, track your applications, and analyze your skill gaps.
+          </p>
         </div>
 
         {/* Login Card */}
