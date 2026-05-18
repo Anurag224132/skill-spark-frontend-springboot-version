@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import api from '../utils/api';
 import PostJob from '../components/recruiter/PostJob';
@@ -8,6 +9,20 @@ import RecruiterAnalytics from '../components/recruiter/RecruiterAnalytics';
 import SkillGapAnalysis from '../components/recruiter/SkillGapAnalysis';
 import LogoutButton from '../components/common/LogoutButton';
 import { useAuth } from '../context/AuthContext';
+import DashboardBackground from '../components/common/DashboardBackground';
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1 }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+};
 
 const RecruiterDashboard = () => {
   const [view, setView] = useState('manage');
@@ -29,14 +44,23 @@ const RecruiterDashboard = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 p-4 md:p-6">
-      <div className="max-w-7xl mx-auto">
+    <div className="min-h-screen bg-[#050B14] text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8">
+      <DashboardBackground />
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="relative z-10 max-w-7xl mx-auto space-y-8"
+      >
         {/* Dark Theme Header */}
-        <div className="bg-gray-900/90 backdrop-blur-xl p-6 md:p-8 rounded-3xl shadow-2xl border border-gray-700/50 mb-8">
+        <motion.div 
+          variants={itemVariants}
+          className="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group"
+        >
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="space-y-3">
-              <h1 className="text-3xl md:text-5xl font-black bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
-                ⚡ Recruiter Command Center
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                Recruiter Command Center
               </h1>
               {currentUser && (
                 <div className="flex items-center space-x-4">
@@ -52,10 +76,13 @@ const RecruiterDashboard = () => {
             </div>
             <LogoutButton />
           </div>
-        </div>
+        </motion.div>
 
-        {/* Neon Navigation */}
-        <div className="bg-black/40 backdrop-blur-xl p-6 rounded-2xl shadow-2xl border border-cyan-500/30 mb-8">
+        {/* Navigation */}
+        <motion.div 
+          variants={itemVariants}
+          className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-2xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300"
+        >
           <div className="flex flex-wrap gap-3 md:gap-4">
             {[
               { key: 'manage', label: 'Manage Jobs', icon: '💼', color: 'cyan', glow: 'shadow-cyan-500/50' },
@@ -68,8 +95,8 @@ const RecruiterDashboard = () => {
                 key={tab.key}
                 onClick={() => setView(tab.key)}
                 className={`flex items-center space-x-3 px-6 md:px-8 py-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 transform hover:scale-105 ${view === tab.key
-                    ? `bg-gradient-to-r from-${tab.color}-500 to-${tab.color}-600 text-white shadow-xl ${tab.glow} border border-${tab.color}-400`
-                    : 'bg-gray-800/60 text-gray-300 hover:bg-gray-700/80 hover:text-white border border-gray-600 hover:border-gray-500'
+                    ? 'bg-gradient-to-r from-emerald-400 to-cyan-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] border border-white/20'
+                    : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white border border-white/10'
                   }`}
               >
                 <span className="text-xl">{tab.icon}</span>
@@ -77,24 +104,37 @@ const RecruiterDashboard = () => {
               </button>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Dynamic Content with Dark Theme */}
-        <div className="transition-all duration-700 ease-in-out transform">
-          {view === 'manage' && <ManageJobs />}
+        <motion.div 
+          variants={itemVariants}
+          className="transition-all duration-700 ease-in-out"
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={view}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+            >
+              {view === 'manage' && <ManageJobs />}
           {view === 'post' && (
             <PostJob onJobPosted={() => setView('manage')} />
           )}
           {view === 'applicants' && <ViewApplicants />}
           {view === 'analytics' && <RecruiterAnalytics />}
-          {view === 'skillgap' && (
-            <SkillGapAnalysis 
-              gaps={skillGaps} 
-              loading={loadingSkillGaps} 
-            />
-          )}
-        </div>
-      </div>
+              {view === 'skillgap' && (
+                <SkillGapAnalysis 
+                  gaps={skillGaps} 
+                  loading={loadingSkillGaps} 
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </motion.div>
+      </motion.div>
     </div>
   );
 };

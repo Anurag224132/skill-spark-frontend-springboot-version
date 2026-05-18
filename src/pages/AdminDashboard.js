@@ -1,11 +1,25 @@
 import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import api from '../utils/api';
 import LogoutButton from '../components/common/LogoutButton';
 import JobManagement from '../components/admin/JobManagement';
 import AnalyticsCard from '../components/admin/AnalyticsCard';
+import DashboardBackground from '../components/common/DashboardBackground';
+
+const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+        opacity: 1,
+        transition: { staggerChildren: 0.1 }
+    }
+};
+
+const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+};
+
 const AdminDashboard = () => {
-    // eslint-disable-next-line no-unused-vars
-    const [metrics, setMetrics] = useState({});
     const [users, setUsers] = useState([]);
     const [jobs, setJobs] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -22,14 +36,12 @@ const AdminDashboard = () => {
         try {
             setLoading(true);
 
-            const [metricsRes, usersRes, jobsRes] = await Promise.all([
-                api.get('/api/admin/metrics'),
+            const [usersRes, jobsRes] = await Promise.all([
                 api.get('/api/admin/users'),
                 api.get('/api/admin/jobs'),
             ]);
 
             // Handle Spring Boot paginated response or direct list
-            setMetrics(metricsRes.data || {});
             setUsers(Array.isArray(usersRes.data) ? usersRes.data : (usersRes.data?.content || []));
             setJobs(Array.isArray(jobsRes.data) ? jobsRes.data : (jobsRes.data?.content || []));
             setError(null);
@@ -229,18 +241,24 @@ const AdminDashboard = () => {
     }
 
     return (
-
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 px-4 py-8">
-            {/* Animated Background Elements */}
-            <div className="fixed inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-            </div>
+        <div className="min-h-screen bg-[#050B14] text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8">
+            <DashboardBackground />
 
             {/* Modal for both User and Job Details */}
+            <AnimatePresence>
             {(selectedJob || selectedUser) && (
-                <div className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-                    <div className="bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/20 shadow-2xl relative">
+                <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 backdrop-blur-md"
+                >
+                    <motion.div 
+                        initial={{ scale: 0.95, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{ scale: 0.95, opacity: 0 }}
+                        className="bg-slate-900/90 backdrop-blur-xl rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/20 shadow-[0_0_50px_rgba(6,182,212,0.15)] relative"
+                    >
                         {/* Close Button */}
                         <button
                             onClick={handleCloseModal}
@@ -674,14 +692,23 @@ const AdminDashboard = () => {
                                 </div>
                             </div>
                         ) : null}
-                    </div>
-                </div>
+                    </motion.div>
+                </motion.div>
             )}
+            </AnimatePresence>
 
             {/* Main Dashboard Content */}
-            <div className="relative z-10 max-w-7xl mx-auto space-y-8">
+            <motion.div 
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                className="relative z-10 max-w-7xl mx-auto space-y-8"
+            >
                 {/* Header Section */}
-                <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl">
+                <motion.div 
+                    variants={itemVariants}
+                    className="flex flex-col lg:flex-row lg:items-center lg:justify-between bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
+                >
                     <div className="flex items-center space-x-4 mb-4 lg:mb-0">
                         <div className="h-16 w-16 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-2xl flex items-center justify-center shadow-lg">
                             <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -702,48 +729,17 @@ const AdminDashboard = () => {
                         </div>
                         <LogoutButton />
                     </div>
-                </div>
+                </motion.div>
 
-                {/* Metrics Section */}
-                {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {Object.entries(metrics).map(([key, value], index) => {
-                        const colors = [
-                            'from-emerald-500 to-teal-500',
-                            'from-blue-500 to-cyan-500',
-                            'from-purple-500 to-pink-500',
-                            'from-orange-500 to-red-500'
-                        ];
-                        const icons = [
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />,
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />,
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />,
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-                        ];
-
-                        return (
-                            <div key={key} className="group bg-white/10 backdrop-blur-xl p-6 rounded-2xl border border-white/20 shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300">
-                                <div className="flex items-center justify-between mb-4">
-                                    <div className={`h-12 w-12 bg-gradient-to-br ${colors[index % colors.length]} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                                        <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            {icons[index % icons.length]}
-                                        </svg>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-3xl font-bold text-white">{value}</p>
-                                        <div className="h-1 w-16 bg-gradient-to-r from-transparent to-emerald-400 rounded-full ml-auto mt-1"></div>
-                                    </div>
-                                </div>
-                                <h3 className="text-lg font-semibold text-gray-300 capitalize">
-                                    {key.replace(/([A-Z])/g, ' $1')}
-                                </h3>
-                            </div>
-                        );
-                    })}              
-                </div> */}
-                <AnalyticsCard />
+                <motion.div variants={itemVariants}>
+                    <AnalyticsCard />
+                </motion.div>
 
                 {/* Users Management Section */}
-                <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-2xl">
+                <motion.div 
+                    variants={itemVariants}
+                    className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-2xl hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-300"
+                >
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
                         <h2 className="text-2xl font-bold text-white">Users Management</h2>
 
@@ -884,126 +880,15 @@ const AdminDashboard = () => {
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </motion.div>
 
                 {/* Jobs Management Section */}
-                <JobManagement />
-                {/* <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-2xl">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center space-x-3">
-                            <div className="h-10 w-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg">
-                                <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
-                                </svg>
-                            </div>
-                            <h2 className="text-2xl font-bold text-white">Jobs Management</h2>
-                        </div>
-                        <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 px-4 py-2 rounded-full border border-purple-500/30 shadow-sm">
-                            <span className="text-purple-300 font-semibold">{jobs.length} Active Jobs</span>
-                        </div>
-                    </div>
-
-                    <div className="overflow-x-auto rounded-2xl border border-white/10 shadow-inner">
-                        <table className="min-w-full divide-y divide-white/10">
-                            <thead className="bg-gradient-to-r from-slate-800/50 to-slate-700/50">
-                                <tr>
-                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
-                                        <div className="flex items-center space-x-2">
-                                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                            </svg>
-                                            <span>Title</span>
-                                        </div>
-                                    </th>
-                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
-                                        <div className="flex items-center space-x-2">
-                                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" />
-                                            </svg>
-                                            <span>Description</span>
-                                        </div>
-                                    </th>
-                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">
-                                        <div className="flex items-center space-x-2">
-                                            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                                            </svg>
-                                            <span>Recruiter</span>
-                                        </div>
-                                    </th>
-                                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-100 uppercase tracking-wider">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="bg-white/5 divide-y divide-white/10">
-                                {jobs.map((job) => (
-                                    <tr key={job.id || job._id} className="hover:bg-white/10">
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="flex items-center">
-                                                <div className="h-8 w-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-lg flex items-center justify-center mr-3">
-                                                    <svg className="h-4 w-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
-                                                    </svg>
-                                                </div>
-                                                <div>
-                                                    <div className="text-sm font-medium text-white">{job.title || 'Untitled Job'}</div>
-                                                    <div className="text-xs text-gray-400">{job.company || 'No company'}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4">
-                                            <div className="text-sm text-gray-300">
-                                                {job.description && job.description.length > 50 ? (
-                                                    <>
-                                                        {job.description.substring(0, 50)}...
-                                                    </>
-                                                ) : (
-                                                    job.description || 'No description'
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap">
-                                            <div className="flex items-center">
-                                                <div className="h-8 w-8 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center mr-3">
-                                                    <span className="text-xs font-bold text-white">
-                                                        {job.postedBy?.name?.charAt(0)?.toUpperCase() || 'R'}
-                                                    </span>
-                                                </div>
-                                                <div>
-                                                    <div className="text-sm text-white">{job.postedBy?.name || job.recruiterName || 'Unknown'}</div>
-                                                    <div className="text-xs text-gray-400">{job.postedBy?.email || ''}</div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                            <div className="flex space-x-2">
-                                                <button
-                                                    onClick={() => handleViewJobDetails(job)}
-                                                    className="group/btn bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 hover:text-purple-200 px-3 py-2 rounded-lg text-xs font-medium border border-purple-500/30 hover:border-purple-500/50 transition-all duration-200 flex items-center space-x-1"
-                                                >
-                                                    <svg className="h-3 w-3 group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                    </svg>
-                                                    <span>Details</span>
-                                                </button>
-                                                <button
-                                                    onClick={() => handleDeleteJob(job.id || job._id)}
-                                                    className="group/btn bg-red-500/20 hover:bg-red-500/30 text-red-300 hover:text-red-200 px-3 py-2 rounded-lg text-xs font-medium border border-red-500/30 hover:border-red-500/50 transition-all duration-200 flex items-center space-x-1"
-                                                >
-                                                    <svg className="h-3 w-3 group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                                    </svg>
-                                                    <span>Delete</span>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div> */}
-            </div>
+                <motion.div 
+                    variants={itemVariants}
+                >
+                    <JobManagement />
+                </motion.div>
+            </motion.div>
         </div>
     );
 };
