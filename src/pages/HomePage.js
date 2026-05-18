@@ -194,8 +194,8 @@ const HomePage = () => {
                                 <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Jobs Matched</p>
                             </div>
                             <div className="text-center px-4">
-                                <h4 className="text-4xl font-black text-white mb-2">5x</h4>
-                                <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Faster Hiring</p>
+                                <h4 className="text-4xl font-black text-white mb-2">500k<span className="text-orange-500">+</span></h4>
+                                <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Skill Gaps Found</p>
                             </div>
                             <div className="text-center px-4">
                                 <h4 className="text-4xl font-black text-white mb-2">24<span className="text-blue-500">/7</span></h4>
@@ -302,6 +302,68 @@ const HomePage = () => {
                                             <div className="h-2 bg-gray-800 rounded-full overflow-hidden"><div className="h-full bg-orange-400 w-[20%]"></div></div>
                                         </div>
                                     </div>
+                                </div>
+                            </FadeInUp>
+                        </div>
+                    </div>
+                </section>
+
+                {/* --- Deep Dive Features (Bento Box) --- */}
+                <section className="py-32 bg-[#050B14]">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <FadeInUp className="text-center mb-16 max-w-3xl mx-auto">
+                            <h2 className="text-3xl md:text-5xl font-black text-white mb-6">Tools that give you an unfair advantage.</h2>
+                            <p className="text-lg text-gray-400">We built exclusive features deep into the platform to ensure candidates never get lost in the void and recruiters always know exactly what they are missing.</p>
+                        </FadeInUp>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-6 max-w-6xl mx-auto">
+                            {/* Card 1: Skill Gap Analysis (Large, spans 2 cols) */}
+                            <FadeInUp delay={0.1} className="md:col-span-2 bg-gradient-to-br from-slate-900 to-[#0A1628] border border-white/10 rounded-3xl p-8 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-40 transition-opacity">
+                                    <svg className="w-32 h-32 text-cyan-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
+                                </div>
+                                <div className="relative z-10 h-full flex flex-col justify-end">
+                                    <div className="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-6">
+                                        <svg className="w-6 h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white mb-2">Skill Gap Analytics</h3>
+                                    <p className="text-gray-400 max-w-md">Recruiters can instantly visualize the exact skills missing from their entire applicant pool, allowing them to adjust job requirements dynamically or know exactly what to train new hires on.</p>
+                                </div>
+                            </FadeInUp>
+
+                            {/* Card 2: Direct Messaging (Small, spans 1 col) */}
+                            <FadeInUp delay={0.2} className="bg-gradient-to-br from-slate-900 to-[#100B20] border border-white/10 rounded-3xl p-8 relative overflow-hidden group">
+                                <div className="relative z-10 h-full flex flex-col justify-end">
+                                    <div className="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center mb-6">
+                                        <svg className="w-6 h-6 text-purple-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" /></svg>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-2">Direct Messaging</h3>
+                                    <p className="text-gray-400 text-sm">Cut out the email ping-pong. Secure, direct communication built right into the platform.</p>
+                                </div>
+                            </FadeInUp>
+
+                            {/* Card 3: Application Tracking (Small, spans 1 col) */}
+                            <FadeInUp delay={0.3} className="bg-gradient-to-br from-slate-900 to-[#0A1A15] border border-white/10 rounded-3xl p-8 relative overflow-hidden group">
+                                <div className="relative z-10 h-full flex flex-col justify-end">
+                                    <div className="w-12 h-12 rounded-xl bg-emerald-500/20 flex items-center justify-center mb-6">
+                                        <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" /></svg>
+                                    </div>
+                                    <h3 className="text-xl font-bold text-white mb-2">Live Status Tracking</h3>
+                                    <p className="text-gray-400 text-sm">Candidates see exactly where they stand: Pending, Interviewing, or Rejected in real-time.</p>
+                                </div>
+                            </FadeInUp>
+
+                            {/* Card 4: Intelligent History (Large, spans 2 cols) */}
+                            <FadeInUp delay={0.4} className="md:col-span-2 bg-gradient-to-br from-slate-900 to-[#1A1010] border border-white/10 rounded-3xl p-8 relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-6 opacity-20 group-hover:opacity-40 transition-opacity">
+                                    <svg className="w-32 h-32 text-orange-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                </div>
+                                <div className="relative z-10 h-full flex flex-col justify-end">
+                                    <div className="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-6">
+                                        <svg className="w-6 h-6 text-orange-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white mb-2">Intelligent History</h3>
+                                    <p className="text-gray-400 max-w-md">Never lose track of a job posting again. The platform securely logs your recently viewed opportunities so you can seamlessly pick up right where you left off.</p>
                                 </div>
                             </FadeInUp>
                         </div>
