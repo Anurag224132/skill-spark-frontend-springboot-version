@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import api from '../utils/api';
 import PostJob from '../components/recruiter/PostJob';
