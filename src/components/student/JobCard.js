@@ -1,15 +1,20 @@
 import { useState, useEffect } from 'react';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore }) => {
+const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore, isApplied = false }) => {
 
   const { currentUser } = useAuth();
   const [fitScore, setFitScore] = useState(null);
-  const [applied, setApplied] = useState(false);
+  const [applied, setApplied] = useState(isApplied);
   const [isLoading, setIsLoading] = useState(false);
   const [applying, setApplying] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    setApplied(isApplied);
+  }, [isApplied]);
 
   useEffect(() => {
     if (preCalculatedFitScore !== undefined && preCalculatedFitScore !== null) {
@@ -95,17 +100,16 @@ const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore }) =>
   const togglePopup = (e) => {
     e.stopPropagation();
     setShowPopup(!showPopup);
-    if (!showPopup) { // Only track when opening
-       handleViewJob();
-    }
   };
 
   return (
     <>
       {/* Job Card (Compact View) */}
-      <div
+      <motion.div
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={handleViewJob}
-        className="cursor-pointer bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 hover:shadow-2xl hover:shadow-emerald-500/20 transition-all duration-300 text-white group"
+        className="cursor-pointer glass-panel p-6 rounded-3xl hover:shadow-glow transition-all duration-300 text-white group"
       >
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           {/* Basic Job Info */}
@@ -157,15 +161,19 @@ const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore }) =>
             </button>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Popup Modal */}
-      {showPopup && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-          <div
-            className="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
+      <AnimatePresence>
+        {showPopup && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-md">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="bg-slate-900 border border-slate-700/50 rounded-3xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
             {/* Header with close button */}
             <div className="flex justify-between items-start mb-6">
               <div>
@@ -278,9 +286,10 @@ const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore }) =>
                 {applied ? '✅ Applied' : applying ? 'Applying...' : '🚀 Apply Now'}
               </button>
             </div>
-          </div>
+          </motion.div>
         </div>
-      )}
+        )}
+      </AnimatePresence>
     </>
   );
 };
