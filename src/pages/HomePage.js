@@ -476,9 +476,9 @@ const HomePage = () => {
                         &copy; {new Date().getFullYear()} SkillSpark Inc. All rights reserved. Built for the future of hiring.
                     </div>
                     <div className="flex gap-4 text-sm text-gray-400">
-                        <a href="#" className="hover:text-white transition-colors">Privacy</a>
-                        <a href="#" className="hover:text-white transition-colors">Terms</a>
-                        <a href="#" className="hover:text-white transition-colors">Contact</a>
+                        <Link to="/privacy" className="hover:text-white transition-colors">Privacy</Link>
+                        <Link to="/terms" className="hover:text-white transition-colors">Terms</Link>
+                        <Link to="/contact" className="hover:text-white transition-colors">Contact</Link>
                     </div>
                 </div>
             </footer>
