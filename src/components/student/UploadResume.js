@@ -5,10 +5,12 @@ const UploadResume = ({ onParsed }) => {
   const [file, setFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
     setError('');
+    setSuccess(false);
   };
 
   const handleUpload = async () => {
@@ -31,7 +33,9 @@ const UploadResume = ({ onParsed }) => {
       });
 
       onParsed(res.data);
+      setSuccess(true);
       setFile(null);
+      setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
       setError('Failed to parse resume. Please try again.');
       console.error('Upload error', err);
@@ -41,75 +45,85 @@ const UploadResume = ({ onParsed }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-10 bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/4 w-60 h-60 bg-gradient-to-br from-blue-400/10 to-indigo-400/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '4s' }}></div>
-      </div>
-
+    <div className="w-full relative">
       {/* Main Card */}
-      <div className="relative z-10 bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl max-w-lg w-full space-y-6 animate-fade-in">
-        <div className="text-center">
-          <div className="mx-auto h-16 w-16 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-2xl flex items-center justify-center mb-4 shadow-lg">
-            <svg className="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+      <div className="w-full space-y-5 animate-fade-in">
+        <div className="flex flex-col items-center text-center">
+          <div className="h-16 w-16 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-400/30 rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(52,211,153,0.2)] relative overflow-hidden group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
+            <div className="absolute inset-0 bg-emerald-400/10 animate-[pulse_2s_ease-in-out_infinite]"></div>
+            <svg className="h-8 w-8 text-emerald-400 relative z-10 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <h2 className="text-3xl font-bold bg-gradient-to-r from-white via-gray-100 to-gray-300 bg-clip-text text-transparent mb-2">Upload Your Resume</h2>
-          <p className="text-gray-300 text-sm">PDF, DOC, or DOCX formats supported</p>
+          <p className="text-gray-400 text-sm">Supported formats: PDF, DOC, DOCX</p>
         </div>
 
-        {/* File Input */}
-        <input
-          type="file"
-          accept=".pdf,.doc,.docx"
-          onChange={handleFileChange}
-          className="block w-full text-sm text-gray-300 border border-white/20 rounded-xl cursor-pointer bg-white/5 hover:bg-white/10 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 p-3 file:px-4 file:py-2 file:bg-gradient-to-r file:from-emerald-500 file:to-cyan-500 file:border-none file:text-white file:rounded-lg file:cursor-pointer file:transition-all file:duration-200 file:hover:from-emerald-600 file:hover:to-cyan-600"
-        />
+        {/* File Input container */}
+        <div className="relative group">
+          <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200"></div>
+          <div className="relative bg-slate-900 border border-white/10 rounded-xl p-1">
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={handleFileChange}
+              className="block w-full text-sm text-gray-300 cursor-pointer focus:outline-none file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 transition-all"
+            />
+          </div>
+        </div>
+
+        {/* File Selected Indicator */}
+        {file && !error && (
+          <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 px-4 py-3 rounded-xl text-sm flex items-center space-x-3">
+            <svg className="h-5 w-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="truncate">{file.name}</span>
+          </div>
+        )}
+
+        {/* Error Message */}
+        {error && (
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm animate-pulse flex items-center space-x-3">
+            <svg className="h-5 w-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="truncate">{error}</span>
+          </div>
+        )}
+
+        {/* Success Message */}
+        {success && (
+          <div className="bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-xl text-sm flex items-center space-x-3 animate-fade-in shadow-lg shadow-emerald-500/10">
+            <svg className="h-5 w-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span className="truncate">Resume parsed successfully! See your skills above.</span>
+          </div>
+        )}
 
         {/* Upload Button */}
         <button
           onClick={handleUpload}
-          disabled={isLoading}
-          className="group w-full flex justify-center items-center px-4 py-4 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:from-emerald-600 hover:to-cyan-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-emerald-500 transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-emerald-500/25"
+          disabled={isLoading || !file}
+          className="group w-full flex justify-center items-center px-4 py-3.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:from-emerald-600 hover:to-cyan-600 transition-all duration-200 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-emerald-500/25"
         >
           {isLoading && (
-            <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent mr-2"></div>
+            <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+            </svg>
           )}
-          {isLoading ? 'Uploading...' : 'Upload Resume'}
+          {isLoading ? 'Analyzing Resume...' : 'Parse Resume'}
         </button>
-
-        {/* Error Message */}
-        {error && (
-          <div className="bg-red-500/20 border border-red-500/30 text-red-300 px-4 py-3 rounded-lg text-sm animate-pulse flex items-center space-x-2">
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-            <span>{error}</span>
-          </div>
-        )}
-
-        {/* File Selected */}
-        {file && !error && (
-          <div className="bg-green-500/20 border border-green-500/30 text-green-300 px-4 py-3 rounded-lg text-sm flex items-center space-x-2">
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-            </svg>
-            <span>{file.name}</span>
-          </div>
-        )}
       </div>
 
-      {/* Fade-in animation */}
       <style jsx>{`
         @keyframes fade-in {
-          from { opacity: 0; transform: translateY(30px); }
+          from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in {
-          animation: fade-in 0.6s ease-out;
+          animation: fade-in 0.4s ease-out;
         }
       `}</style>
     </div>
