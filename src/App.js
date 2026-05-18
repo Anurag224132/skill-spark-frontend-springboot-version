@@ -16,6 +16,9 @@ const HomePage = lazy(() => import('./pages/HomePage'));
 const RecentJobsPage = lazy(() => import('./components/student/RecentJobsPage'));
 const ForgotPassword = lazy(() => import('./components/auth/ForgotPassword'));
 const ResetPassword = lazy(() => import('./components/auth/ResetPassword'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const ContactUs = lazy(() => import('./pages/ContactUs'));
 
 const LoadingFallback = () => (
   <div className="flex justify-center items-center min-h-screen">
@@ -71,6 +74,9 @@ function App() {
               <Route path="/student/dashboard" element={<PageTransition><StudentDashboard /></PageTransition>} />
               <Route path="/forgot-password" element={<PageTransition><ForgotPassword /></PageTransition>} />
               <Route path="/reset-password" element={<PageTransition><ResetPassword /></PageTransition>} />
+              <Route path="/privacy" element={<PageTransition><PrivacyPolicy /></PageTransition>} />
+              <Route path="/terms" element={<PageTransition><TermsOfService /></PageTransition>} />
+              <Route path="/contact" element={<PageTransition><ContactUs /></PageTransition>} />
             </Routes>
           </AnimatePresence>
         </Suspense>
