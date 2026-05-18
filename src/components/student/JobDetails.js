@@ -2,7 +2,6 @@
 import { useState, useEffect, useRef } from 'react';
 import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
-import { useParams } from 'react-router-dom';
 const JobDetails = ({ jobId, onClose }) => {
     const { currentUser } = useAuth();
     const [job, setJob] = useState(null);
@@ -57,6 +56,7 @@ const JobDetails = ({ jobId, onClose }) => {
                 window.removeEventListener('mouseup', handleMouseUp);
             };
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dragging, dragStart]);
 
     // Fetch job and application data
@@ -100,8 +100,6 @@ const JobDetails = ({ jobId, onClose }) => {
 
     const handleApply = async () => {
         try {
-            const token = localStorage.getItem('token');
-
             // First calculate fit score
             const fitRes = await api.post(`/api/applications/calculate-fit`, {
                 resumeSkills: currentUser.skills || [],

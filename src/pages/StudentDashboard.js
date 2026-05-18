@@ -5,7 +5,7 @@ import UploadResume from '../components/student/UploadResume';
 import StudentAnalytics from '../components/student/StudentAnalytics';
 import ProfileSection from '../components/student/ProfileSection';
 import LogoutButton from '../components/common/LogoutButton';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import JobDetails from '../components/student/JobDetails';
 import api from '../utils/api';
 import Pagination from '../components/common/Pagination';
@@ -29,7 +29,6 @@ const itemVariants = {
 const StudentDashboard = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
-  const { jobId } = useParams();
 
   // State declarations
   const [userSkills, setUserSkills] = useState([]);
@@ -61,8 +60,7 @@ const StudentDashboard = () => {
   // Use React Query for fetching recommended jobs
   const {
     data: jobsData,
-    isLoading: loading,
-    error: fetchError
+    isLoading: loading
   } = useQuery({
     queryKey: ['recommendedJobs', page, userSkills, hasUploadedResume],
     queryFn: async () => {
@@ -151,8 +149,8 @@ const StudentDashboard = () => {
     enabled: !!currentUser && (currentUser.role === 'student' || currentUser.role === 'STUDENT'),
   });
 
-  const appliedJobs = appliedJobsData || [];
-  const appliedJobIds = new Set(appliedJobs.map(app => app.job?.id || app.job?._id));
+  const appliedJobs = useMemo(() => appliedJobsData || [], [appliedJobsData]);
+  const appliedJobIds = useMemo(() => new Set(appliedJobs.map(app => app.job?.id || app.job?._id)), [appliedJobs]);
 
   // Handle resume parse update
   const handleResumeParsed = (parsedData) => {

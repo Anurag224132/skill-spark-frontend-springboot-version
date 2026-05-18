@@ -4,6 +4,7 @@ import LogoutButton from '../components/common/LogoutButton';
 import JobManagement from '../components/admin/JobManagement';
 import AnalyticsCard from '../components/admin/AnalyticsCard';
 const AdminDashboard = () => {
+    // eslint-disable-next-line no-unused-vars
     const [metrics, setMetrics] = useState({});
     const [users, setUsers] = useState([]);
     const [jobs, setJobs] = useState([]);
