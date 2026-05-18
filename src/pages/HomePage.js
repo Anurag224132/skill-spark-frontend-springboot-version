@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import adminpic from '../assets/images/admin.png';
 import appic from '../assets/images/app.png';
@@ -9,229 +9,419 @@ import recruiterpic from '../assets/images/recruiter.png';
 import resumeparsing from '../assets/images/resumeParsing.png';
 import studentpic from '../assets/images/student.png';
 
-// Main Home Page Component
-const HomePage = () => {
-    // Helper component for Feature Cards
-    const FeatureCard = ({ icon, title, children, delay }) => (
-        <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay }}
-            whileHover={{ y: -8, scale: 1.02 }}
-            className="glass-panel p-8 rounded-3xl text-center group cursor-default"
-        >
-            <div className="mb-6 inline-block p-4 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-2xl shadow-glow group-hover:from-emerald-500 group-hover:to-cyan-500 transition-all duration-300">
-                {icon}
-            </div>
-            <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
-            <p className="text-gray-400 text-sm leading-relaxed">{children}</p>
-        </motion.div>
-    );
+// --- Shared Animation Wrappers ---
+const FadeInUp = ({ children, delay = 0, className = "" }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7, delay, ease: "easeOut" }}
+        className={className}
+    >
+        {children}
+    </motion.div>
+);
 
-    // Helper component for "How It Works" Steps
-    const StepCard = ({ number, title, children, delay }) => (
-         <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.5, delay }}
-            className="relative pl-12 pb-10 border-l-2 border-slate-700/50 last:border-transparent last:pb-0"
-         >
-            <div className="absolute left-[-17px] top-0 flex items-center justify-center w-8 h-8 font-bold text-white bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-full shadow-glow">
-                {number}
-            </div>
-            <h4 className="font-bold text-lg text-white mb-2">{title}</h4>
-            <p className="text-gray-400 text-sm leading-relaxed">{children}</p>
-        </motion.div>
-    );
+const HomePage = () => {
+    // Dynamic text for Hero Section
+    const [textIndex, setTextIndex] = useState(0);
+    const dynamicTexts = ["Intelligently.", "Instantly.", "Accurately.", "Effortlessly."];
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setTextIndex((prev) => (prev + 1) % dynamicTexts.length);
+        }, 3000);
+        return () => clearInterval(interval);
+    }, [dynamicTexts.length]);
 
     const screenshots = [
-      {
-        title: "Student Dashboard",
-        description: "Personalized job recommendations with AI-powered fit scores.",
-        imageUrl: studentpic
-      },
-      {
-        title: "Recruiter Analytics",
-        description: "In-depth analytics and skill-gap analysis for recruiters.",
-        imageUrl: recruiterpic
-      },
-      {
-        title: "Admin Control Panel",
-        description: "Comprehensive user and job management for administrators.",
-        imageUrl: adminpic
-      },
-      {
-        title: "Job Application View",
-        description: "Track the status of all your job applications in one place.",
-        imageUrl: applicationpic
-      },
-      {
-        title: "AI Resume Parsing",
-        description: "Upload your resume and see our AI extract your skills in real-time.",
-        imageUrl: resumeparsing
-      }
+        {
+            title: "Student Dashboard",
+            description: "Personalized job recommendations with AI-powered fit scores.",
+            imageUrl: studentpic
+        },
+        {
+            title: "Recruiter Analytics",
+            description: "In-depth analytics and skill-gap analysis for recruiters.",
+            imageUrl: recruiterpic
+        },
+        {
+            title: "Admin Control Panel",
+            description: "Comprehensive user and job management for administrators.",
+            imageUrl: adminpic
+        },
+        {
+            title: "Job Application View",
+            description: "Track the status of all your job applications in one place.",
+            imageUrl: applicationpic
+        },
+        {
+            title: "AI Resume Parsing",
+            description: "Upload your resume and see our AI extract your skills in real-time.",
+            imageUrl: resumeparsing
+        }
     ];
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 text-white font-sans">
-            {/* Header */}
-            <header className="py-5 px-4 md:px-8 sticky top-0 z-50 bg-slate-900/50 backdrop-blur-lg border-b border-white/10">
-                <nav className="max-w-7xl mx-auto flex justify-between items-center">
-                    <a href="/" className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-                        SkillSpark
+        <div className="min-h-screen bg-[#050B14] text-white font-sans overflow-hidden selection:bg-cyan-500/30">
+            {/* --- Global Background Effects --- */}
+            <div className="fixed inset-0 pointer-events-none z-0">
+                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-600/10 rounded-full blur-[120px] mix-blend-screen animate-pulse-slow"></div>
+                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] mix-blend-screen animate-pulse-slow" style={{ animationDelay: '2s' }}></div>
+                <div className="absolute top-[40%] left-[60%] w-[30%] h-[30%] bg-cyan-600/10 rounded-full blur-[100px] mix-blend-screen animate-float"></div>
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay"></div>
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050B14]/80 to-[#050B14]"></div>
+            </div>
+
+            {/* --- Header Navigation --- */}
+            <header className="fixed w-full top-0 z-50 bg-[#050B14]/60 backdrop-blur-xl border-b border-white/5 transition-all duration-300">
+                <nav className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+                    <a href="/" className="text-2xl font-black tracking-tight flex items-center gap-2 group">
+                        <span className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-shadow">
+                            <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                            </svg>
+                        </span>
+                        <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">SkillSpark</span>
                     </a>
-                    <div className="hidden md:flex items-center space-x-6 text-sm">
-                        <a href="#features" className="hover:text-cyan-400 transition">Features</a>
-                        <a href="#gallery" className="hover:text-cyan-400 transition">Gallery</a>
-                        <a href="#how-it-works" className="hover:text-cyan-400 transition">How It Works</a>
+                    
+                    <div className="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                        <a href="#about" className="hover:text-cyan-400 transition-colors">About</a>
+                        <a href="#benefits" className="hover:text-cyan-400 transition-colors">Benefits</a>
+                        <a href="#how-it-works" className="hover:text-cyan-400 transition-colors">How it Works</a>
+                        <a href="#gallery" className="hover:text-cyan-400 transition-colors">Gallery</a>
                     </div>
-                    <div className="flex items-center space-x-3">
-                        <Link to="/login" className="px-4 py-2 text-sm rounded-full border border-cyan-400 text-cyan-400 hover:bg-cyan-400/10 transition">
-                            Login
+                    
+                    <div className="flex items-center space-x-4">
+                        <Link to="/login" className="hidden sm:block px-5 py-2.5 text-sm font-semibold rounded-full border border-white/10 text-white hover:bg-white/5 transition-colors">
+                            Log in
                         </Link>
-                        <Link to="/signup" className="px-4 py-2 text-sm rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 transition shadow-lg">
-                            Sign Up
+                        <Link to="/signup" className="px-5 py-2.5 text-sm font-bold rounded-full bg-white text-black hover:bg-cyan-50 hover:scale-105 transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)]">
+                            Get Started
                         </Link>
                     </div>
                 </nav>
             </header>
 
-            <main>
-                {/* Hero Section */}
-                <section className="pt-32 pb-20 md:pt-40 md:pb-32 text-center relative overflow-hidden">
-                     <div className="absolute inset-0 bg-grid-slate-700/20 [mask-image:linear-gradient(to_bottom,white_20%,transparent_100%)] animate-pulse-slow"></div>
-                     <div className="absolute top-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl animate-float"></div>
-                     <div className="absolute bottom-20 right-10 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-float" style={{ animationDelay: '2s' }}></div>
-                     
-                    <div className="max-w-4xl mx-auto px-4 relative z-10">
+            <main className="relative z-10">
+                {/* --- Hero Section --- */}
+                <section className="pt-40 pb-20 md:pt-52 md:pb-32 px-4 text-center relative">
+                    <div className="max-w-5xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.8 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.8, ease: "easeOut" }}
+                            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-cyan-300 text-sm font-medium mb-8 backdrop-blur-md"
+                        >
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-500"></span>
+                            </span>
+                            SkillSpark 2.0 is Live
+                        </motion.div>
+
                         <motion.h1 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.7 }}
-                            className="text-5xl md:text-7xl font-black bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent mb-6 leading-tight drop-shadow-2xl"
+                            transition={{ duration: 0.8, delay: 0.1 }}
+                            className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white mb-6 leading-[1.1]"
                         >
-                            Where Talent Meets Opportunity, Intelligently.
+                            Where Talent Meets Opportunity, <br className="hidden md:block"/>
+                            <span className="inline-block min-w-[300px] text-left ml-4">
+                                <AnimatePresence mode="wait">
+                                    <motion.span
+                                        key={textIndex}
+                                        initial={{ opacity: 0, y: 20, rotateX: 90 }}
+                                        animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                                        exit={{ opacity: 0, y: -20, rotateX: -90 }}
+                                        transition={{ duration: 0.4 }}
+                                        className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-500 bg-clip-text text-transparent absolute"
+                                    >
+                                        {dynamicTexts[textIndex]}
+                                    </motion.span>
+                                </AnimatePresence>
+                                <span className="invisible">Effortlessly.</span> {/* Spacer */}
+                            </span>
                         </motion.h1>
+
                         <motion.p 
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.7, delay: 0.2 }}
-                            className="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto mb-10"
+                            transition={{ duration: 0.8, delay: 0.2 }}
+                            className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 leading-relaxed"
                         >
-                            Our AI-powered platform analyzes your skills to connect you with the perfect job, and helps recruiters find the ideal candidate faster than ever.
+                            Stop blindly submitting resumes. SkillSpark uses advanced Machine Learning to parse your skills, match you with exact job requirements, and instantly connect top talent with modern recruiters.
                         </motion.p>
+
                         <motion.div 
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, delay: 0.4 }}
-                            className="flex justify-center gap-4"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            className="flex flex-col sm:flex-row justify-center items-center gap-4"
                         >
-                             <Link to="/signup" className="px-8 py-4 text-lg font-bold rounded-full bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 transition-all duration-300 transform hover:scale-105 shadow-glow">
-                                Get Started
+                             <Link to="/signup" className="w-full sm:w-auto px-8 py-4 text-base font-bold rounded-full bg-white text-black hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2">
+                                Start Hiring / Applying
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                             </Link>
+                            <a href="#how-it-works" className="w-full sm:w-auto px-8 py-4 text-base font-bold rounded-full border border-white/20 text-white hover:bg-white/5 transition-all flex items-center justify-center">
+                                See How it Works
+                            </a>
                         </motion.div>
                     </div>
+
+                    {/* Dashboard Preview Graphic */}
+                    <FadeInUp delay={0.6} className="mt-20 max-w-6xl mx-auto relative perspective-1000">
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#050B14] via-transparent to-transparent z-10 bottom-0 h-1/2 mt-auto"></div>
+                        <img 
+                            src={appic} 
+                            alt="SkillSpark Dashboard" 
+                            className="rounded-xl border border-white/10 shadow-[0_0_100px_rgba(6,182,212,0.2)] transform rotateX-12 scale-105"
+                            style={{ transform: "perspective(1000px) rotateX(5deg)" }}
+                        />
+                    </FadeInUp>
                 </section>
 
-                {/* Features Section */}
-                <section id="features" className="py-24 bg-slate-900/40">
-                    <div className="max-w-7xl mx-auto px-4">
-                        <div className="text-center mb-16">
-                            <h2 className="text-4xl font-bold text-white">A Smarter Way to Hire and Get Hired</h2>
-                            <p className="text-gray-400 mt-4 max-w-2xl mx-auto">SkillSpark is more than a job board. It's a smart ecosystem with dedicated features for everyone.</p>
-                        </div>
-                        <div className="grid md:grid-cols-3 gap-8">
-                            <FeatureCard delay={0.1} title="For Students: Smart Job Matching" icon={<svg className="w-8 h-8 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M12 6V3m0 18v-3m6-7h3m-18 0h3m6 7a5 5 0 100-10 5 5 0 000 10z" /></svg>}>
-                                Upload your resume and our AI will instantly parse your skills to provide a "Fit Score" for every job, showing you the best opportunities first.
-                            </FeatureCard>
-                            <FeatureCard delay={0.2} title="For Recruiters: Data-Driven Hiring" icon={<svg className="w-8 h-8 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283-.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}>
-                                Get a ranked list of candidates, perform skill-gap analysis on your applicant pool, and use predictive analytics to forecast hiring trends.
-                            </FeatureCard>
-                            <FeatureCard delay={0.3} title="For Admins: Total Control" icon={<svg className="w-8 h-8 text-white group-hover:text-white transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>}>
-                                A comprehensive dashboard to manage users, oversee job postings, and monitor system-wide analytics with a full audit log of all admin actions.
-                            </FeatureCard>
+                {/* --- Stats Banner --- */}
+                <section className="py-12 border-y border-white/5 bg-white/[0.02]">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-white/5">
+                            <div className="text-center px-4">
+                                <h4 className="text-4xl font-black text-white mb-2">98<span className="text-cyan-500">%</span></h4>
+                                <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Parsing Accuracy</p>
+                            </div>
+                            <div className="text-center px-4">
+                                <h4 className="text-4xl font-black text-white mb-2">10k<span className="text-emerald-500">+</span></h4>
+                                <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Jobs Matched</p>
+                            </div>
+                            <div className="text-center px-4">
+                                <h4 className="text-4xl font-black text-white mb-2">5x</h4>
+                                <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">Faster Hiring</p>
+                            </div>
+                            <div className="text-center px-4">
+                                <h4 className="text-4xl font-black text-white mb-2">24<span className="text-blue-500">/7</span></h4>
+                                <p className="text-sm font-medium text-gray-500 uppercase tracking-wider">ML Processing</p>
+                            </div>
                         </div>
                     </div>
                 </section>
 
-                {/* Gallery Section */}
-                <section id="gallery" className="py-24">
-                    <div className="max-w-7xl mx-auto px-4">
-                        <div className="text-center mb-16">
-                            <h2 className="text-4xl font-bold text-white">See SkillSpark in Action</h2>
-                            <p className="text-gray-400 mt-4 max-w-2xl mx-auto">A glimpse into the user-friendly and powerful dashboards that drive our platform.</p>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                            {screenshots.map((screenshot, index) => (
-                                <motion.div 
-                                    key={index} 
-                                    initial={{ opacity: 0, scale: 0.9 }}
-                                    whileInView={{ opacity: 1, scale: 1 }}
-                                    viewport={{ once: true, margin: "-50px" }}
-                                    transition={{ duration: 0.5, delay: index * 0.1 }}
-                                    whileHover={{ y: -8, scale: 1.02 }}
-                                    className="group glass-panel p-4 rounded-3xl cursor-default"
-                                >
-                                    <div className="overflow-hidden rounded-2xl mb-4">
-                                        <img src={screenshot.imageUrl} alt={screenshot.title} className="w-full h-auto transition-transform duration-500 group-hover:scale-105"/>
+                {/* --- About Section --- */}
+                <section id="about" className="py-32 relative">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <FadeInUp className="text-center mb-20 max-w-3xl mx-auto">
+                            <h2 className="text-cyan-400 font-bold tracking-wide uppercase text-sm mb-3">What is SkillSpark?</h2>
+                            <h3 className="text-4xl md:text-5xl font-black text-white mb-6 leading-tight">The new standard for intelligent recruitment.</h3>
+                            <p className="text-lg text-gray-400">We replace outdated keyword scanners with contextual Machine Learning. SkillSpark understands what you actually know, not just the buzzwords on your PDF.</p>
+                        </FadeInUp>
+
+                        <div className="grid md:grid-cols-3 gap-6">
+                            {[
+                                {
+                                    title: "AI Resume Parsing",
+                                    desc: "Upload any PDF. Our models extract dense skills, education, and experience contexts in milliseconds, structuring your data perfectly.",
+                                    icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                },
+                                {
+                                    title: "ML Fit Scoring",
+                                    desc: "Every job you view is instantly ranked with a 0-100% Fit Score based on a deep semantic comparison of your capabilities vs job requirements.",
+                                    icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                },
+                                {
+                                    title: "Recruiter Analytics",
+                                    desc: "See exact skill gaps across your entire applicant pool. Know exactly why a candidate is an 85% match and what they are missing.",
+                                    icon: <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                                }
+                            ].map((feature, i) => (
+                                <FadeInUp key={i} delay={i * 0.15} className="bg-white/[0.03] border border-white/10 p-8 rounded-3xl hover:bg-white/[0.05] transition-colors group">
+                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/30 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                                        <svg className="w-7 h-7 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            {feature.icon}
+                                        </svg>
                                     </div>
-                                    <h3 className="font-bold text-lg text-white mb-1 group-hover:text-cyan-300 transition-colors">{screenshot.title}</h3>
-                                    <p className="text-gray-400 text-sm">{screenshot.description}</p>
-                                </motion.div>
+                                    <h4 className="text-xl font-bold text-white mb-3">{feature.title}</h4>
+                                    <p className="text-gray-400 leading-relaxed">{feature.desc}</p>
+                                </FadeInUp>
                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* How It Works Section */}
-                <section id="how-it-works" className="py-24 bg-slate-900/40">
-                     <div className="max-w-7xl mx-auto px-4 flex flex-col lg:flex-row items-center gap-16">
-                        <div className="lg:w-1/2">
-                            <h2 className="text-4xl font-bold text-white mb-4">Get Started in 4 Easy Steps</h2>
-                            <p className="text-gray-400 mb-12">Our streamlined process makes it simple to find your next career move or your next star employee.</p>
-                            <div className="space-y-4">
-                                <StepCard delay={0.1} number="1" title="Create Your Account">
-                                    Sign up in seconds as a student looking for opportunities or a recruiter ready to hire.
-                                </StepCard>
-                                 <StepCard delay={0.2} number="2" title="Upload Your Resume">
-                                    Students can upload their resume, and our AI will parse, analyze, and map out their skills.
-                                </StepCard>
-                                <StepCard delay={0.3} number="3" title="Post or Find Jobs">
-                                    Recruiters post jobs with required skills. Students see jobs ranked by their "Fit Score".
-                                </StepCard>
-                                <StepCard delay={0.4} number="4" title="Connect and Grow">
-                                    Apply with confidence, track your application status, and connect with top talent.
-                                </StepCard>
+                {/* --- Benefits Section --- */}
+                <section id="benefits" className="py-32 bg-[#08101C] relative border-y border-white/5">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <div className="grid lg:grid-cols-2 gap-16 items-center">
+                            <FadeInUp>
+                                <h2 className="text-3xl md:text-5xl font-black text-white mb-6 leading-tight">Built for both sides of the interview table.</h2>
+                                <p className="text-lg text-gray-400 mb-8">Whether you are trying to land your dream role or trying to hire the perfect developer, SkillSpark eliminates the noise.</p>
+                                
+                                <div className="space-y-6">
+                                    <div className="flex gap-4">
+                                        <div className="w-12 h-12 shrink-0 rounded-full bg-emerald-500/20 flex items-center justify-center">
+                                            <span className="text-xl">🎓</span>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-lg font-bold text-white mb-1">For Candidates</h4>
+                                            <p className="text-gray-400 text-sm leading-relaxed">No more black holes. Get immediate feedback on how well your resume matches a job. See what skills you need to learn to bump your match score from 70% to 95%.</p>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <div className="w-12 h-12 shrink-0 rounded-full bg-purple-500/20 flex items-center justify-center">
+                                            <span className="text-xl">💼</span>
+                                        </div>
+                                        <div>
+                                            <h4 className="text-lg font-bold text-white mb-1">For Recruiters</h4>
+                                            <p className="text-gray-400 text-sm leading-relaxed">Stop reading 500 identical resumes. View a dashboard of applicants pre-ranked by our ML algorithm. Identify skill gaps before scheduling the first phone screen.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </FadeInUp>
+                            
+                            <FadeInUp delay={0.3} className="relative">
+                                <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 blur-[100px] rounded-full"></div>
+                                <div className="relative bg-white/[0.03] border border-white/10 rounded-3xl p-8 backdrop-blur-xl">
+                                    <div className="flex items-center justify-between mb-6 pb-6 border-b border-white/10">
+                                        <div>
+                                            <div className="text-sm text-gray-400 mb-1">Applicant Match Score</div>
+                                            <div className="text-3xl font-black text-white">94% Fit</div>
+                                        </div>
+                                        <div className="px-4 py-2 bg-emerald-500/20 text-emerald-400 rounded-full text-sm font-bold border border-emerald-500/30">
+                                            Highly Recommended
+                                        </div>
+                                    </div>
+                                    <div className="space-y-4">
+                                        <div>
+                                            <div className="flex justify-between text-sm mb-2"><span className="text-white">React.js</span><span className="text-cyan-400">Match</span></div>
+                                            <div className="h-2 bg-gray-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-400 w-full"></div></div>
+                                        </div>
+                                        <div>
+                                            <div className="flex justify-between text-sm mb-2"><span className="text-white">Spring Boot</span><span className="text-cyan-400">Match</span></div>
+                                            <div className="h-2 bg-gray-800 rounded-full overflow-hidden"><div className="h-full bg-cyan-400 w-full"></div></div>
+                                        </div>
+                                        <div>
+                                            <div className="flex justify-between text-sm mb-2"><span className="text-white">Docker</span><span className="text-orange-400">Missing Gap</span></div>
+                                            <div className="h-2 bg-gray-800 rounded-full overflow-hidden"><div className="h-full bg-orange-400 w-[20%]"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </FadeInUp>
+                        </div>
+                    </div>
+                </section>
+
+                {/* --- How It Works Stepper --- */}
+                <section id="how-it-works" className="py-32">
+                    <div className="max-w-5xl mx-auto px-6">
+                        <FadeInUp className="text-center mb-20">
+                            <h2 className="text-3xl md:text-5xl font-black text-white mb-6">How SkillSpark Works</h2>
+                            <p className="text-lg text-gray-400">A seamless pipeline from PDF upload to job offer.</p>
+                        </FadeInUp>
+
+                        <div className="relative border-l border-white/10 ml-6 md:ml-0 md:border-none space-y-12 md:space-y-0">
+                            <div className="hidden md:block absolute top-1/2 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-y-1/2"></div>
+                            
+                            <div className="grid md:grid-cols-3 gap-12 md:gap-8 relative z-10">
+                                {[
+                                    {
+                                        step: "01",
+                                        title: "Upload Resume",
+                                        desc: "Drop your PDF. We extract every skill, timeline, and detail instantly.",
+                                        color: "from-blue-500 to-cyan-500"
+                                    },
+                                    {
+                                        step: "02",
+                                        title: "AI Analysis",
+                                        desc: "Our ML models map your profile against active job market requirements.",
+                                        color: "from-cyan-500 to-emerald-500"
+                                    },
+                                    {
+                                        step: "03",
+                                        title: "Get Matched",
+                                        desc: "Apply to jobs where you have a 90%+ fit score. Bypass the screening phase.",
+                                        color: "from-emerald-500 to-green-500"
+                                    }
+                                ].map((item, i) => (
+                                    <FadeInUp key={i} delay={i * 0.2} className="relative pl-8 md:pl-0 text-left md:text-center">
+                                        <div className={`absolute left-[-32px] md:relative md:left-auto md:mx-auto w-12 h-12 bg-gradient-to-br ${item.color} rounded-full flex items-center justify-center font-black text-lg text-white mb-6 shadow-lg shadow-cyan-500/20 border-4 border-[#050B14]`}>
+                                            {item.step}
+                                        </div>
+                                        <h4 className="text-xl font-bold text-white mb-3">{item.title}</h4>
+                                        <p className="text-gray-400 leading-relaxed text-sm">{item.desc}</p>
+                                    </FadeInUp>
+                                ))}
                             </div>
                         </div>
-                        <div className="lg:w-1/2">
-                           <div className="bg-slate-800/50 p-6 rounded-2xl border border-white/10 shadow-lg">
-                                <img src={appic} alt="App Screenshot" className="rounded-lg shadow-2xl"/>
-                           </div>
+                    </div>
+                </section>
+
+                {/* --- Gallery Section --- */}
+                <section id="gallery" className="py-32 bg-[#08101C] border-y border-white/5">
+                    <div className="max-w-7xl mx-auto px-6">
+                        <FadeInUp className="text-center mb-16">
+                            <h2 className="text-3xl md:text-5xl font-black text-white mb-6">See Inside the Platform</h2>
+                            <p className="text-lg text-gray-400">Beautiful, dark-mode first dashboards for ultimate productivity.</p>
+                        </FadeInUp>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {screenshots.map((screenshot, index) => (
+                                <FadeInUp 
+                                    key={index} 
+                                    delay={index * 0.1}
+                                    className="group bg-white/[0.02] border border-white/5 rounded-3xl p-3 overflow-hidden cursor-crosshair"
+                                >
+                                    <div className="overflow-hidden rounded-2xl mb-4 relative aspect-video">
+                                        <div className="absolute inset-0 bg-cyan-500/20 mix-blend-overlay opacity-0 group-hover:opacity-100 transition-opacity z-10"></div>
+                                        <img src={screenshot.imageUrl} alt={screenshot.title} className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-110"/>
+                                    </div>
+                                    <div className="px-3 pb-3">
+                                        <h3 className="font-bold text-lg text-white mb-1 group-hover:text-cyan-400 transition-colors">{screenshot.title}</h3>
+                                        <p className="text-gray-500 text-sm leading-relaxed">{screenshot.description}</p>
+                                    </div>
+                                </FadeInUp>
+                            ))}
                         </div>
+                    </div>
+                </section>
+
+                {/* --- Massive CTA Section --- */}
+                <section className="py-32 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-[#050B14] to-cyan-900/20"></div>
+                    <div className="max-w-4xl mx-auto px-6 relative z-10 text-center">
+                        <FadeInUp>
+                            <h2 className="text-5xl md:text-7xl font-black text-white mb-8 tracking-tight">Ready to spark <br/> your career?</h2>
+                            <p className="text-xl text-cyan-100/70 mb-10 max-w-2xl mx-auto">Join thousands of students and top-tier companies using SkillSpark to make hiring intelligent, fair, and incredibly fast.</p>
+                            <div className="flex flex-col sm:flex-row justify-center gap-4">
+                                <Link to="/signup" className="px-10 py-5 text-lg font-bold rounded-full bg-white text-black hover:scale-105 transition-transform shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+                                    Create Free Account
+                                </Link>
+                                <Link to="/login" className="px-10 py-5 text-lg font-bold rounded-full bg-white/5 border border-white/20 text-white hover:bg-white/10 transition-colors">
+                                    Log in to Dashboard
+                                </Link>
+                            </div>
+                        </FadeInUp>
                     </div>
                 </section>
             </main>
 
-             {/* Footer */}
-            <footer className="bg-slate-900/50 border-t border-white/10 mt-10">
-                <div className="max-w-7xl mx-auto py-8 px-4 text-center text-gray-400 text-sm">
-                    <p>&copy; {new Date().getFullYear()} SkillSpark. All Rights Reserved.</p>
+             {/* --- Footer --- */}
+            <footer className="bg-black py-12 border-t border-white/10 relative z-10">
+                <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="flex items-center gap-2">
+                        <span className="w-6 h-6 rounded bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center">
+                            <svg className="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                        </span>
+                        <span className="font-bold text-white tracking-wide">SkillSpark</span>
+                    </div>
+                    <div className="text-gray-500 text-sm">
+                        &copy; {new Date().getFullYear()} SkillSpark Inc. All rights reserved. Built for the future of hiring.
+                    </div>
+                    <div className="flex gap-4 text-sm text-gray-400">
+                        <a href="#" className="hover:text-white transition-colors">Privacy</a>
+                        <a href="#" className="hover:text-white transition-colors">Terms</a>
+                        <a href="#" className="hover:text-white transition-colors">Contact</a>
+                    </div>
                 </div>
             </footer>
-             <style>{`
-                .bg-grid-slate-700\\/20 {
-                    background-image: linear-gradient(white 1px, transparent 1px), linear-gradient(to right, white 1px, transparent 1px);
-                    background-size: 4rem 4rem;
-                    background-color: transparent;
-                    opacity: 0.1;
-                }
-            `}</style>
         </div>
     );
 };
 
 export default HomePage;
-
