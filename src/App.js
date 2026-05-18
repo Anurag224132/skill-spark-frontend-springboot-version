@@ -21,8 +21,8 @@ const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 
 const LoadingFallback = () => (
-  <div className="flex justify-center items-center min-h-screen">
-    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+  <div className="flex justify-center items-center min-h-screen bg-[#050B14]">
+    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div>
   </div>
 );
 
@@ -53,7 +53,7 @@ function App() {
 
   return (
     <AuthProvider>
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-[#050B14] text-white">
         <Suspense fallback={<LoadingFallback />}>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>

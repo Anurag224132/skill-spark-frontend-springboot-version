@@ -40,7 +40,7 @@ const AnalyticsCard = () => {
           totalUsers: response.data.totalUsers || 0,
           activeJobs: response.data.activeJobs || 0,
           totalApplications: response.data.totalApplications || 0,
-          totalCourses: response.data.totalCourses || 0
+          totalInterviews: response.data.totalInterviews || 0
         },
         userActivity: response.data.userActivity || generateEmptyWeekData(),
         roleDistribution: [
@@ -61,7 +61,7 @@ const AnalyticsCard = () => {
           totalUsers: 0,
           activeJobs: 0,
           totalApplications: 0,
-          totalCourses: 0
+          totalInterviews: 0
         },
         userActivity: generateEmptyWeekData(),
         roleDistribution: [
@@ -130,17 +130,17 @@ const AnalyticsCard = () => {
       gradient: 'from-purple-500 to-pink-500',
       label: 'Applications'
     },
-    totalCourses: {
+    totalInterviews: {
       icon: (
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
           strokeWidth="2"
-          d="M13 10V3L4 14h7v7l9-11h-7z"
+          d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
         />
       ),
       gradient: 'from-orange-500 to-red-500',
-      label: 'Courses'
+      label: 'Total Interviews'
     }
   };
 

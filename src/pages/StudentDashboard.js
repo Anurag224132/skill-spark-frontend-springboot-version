@@ -12,6 +12,7 @@ import Pagination from '../components/common/Pagination';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import DashboardBackground from '../components/common/DashboardBackground';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -77,52 +78,53 @@ const StudentDashboard = () => {
       let scores = {};
       let rankedJobs = [...allJobs];
 
-      // 1. Fetch Fit Scores in Batch (shows match scores for all fetched jobs)
-      try {
-        console.log('Calculating fit scores for', allJobs.length, 'jobs');
-        const fitRes = await api.post('/api/applications/calculate-fit-batch', {
-          jobIds: allJobs.map(j => j.id || j._id),
-          resumeSkills: userSkills
+      // 1. Run Fit Scores and ML Ranking concurrently to drastically reduce load time
+      const fitPromise = api.post('/api/applications/calculate-fit-batch', {
+        jobIds: allJobs.map(j => j.id || j._id),
+        resumeSkills: userSkills
+      }).then(res => res.data).catch(err => {
+        console.error('Error fetching batch fit scores:', err);
+        return {};
+      });
+
+      let mlPromise = Promise.resolve(null);
+      if (userSkills.length > 0 && process.env.REACT_APP_ML_API_URL) {
+        console.log('Requesting ML ranking for user skills concurrently...');
+        mlPromise = axios.post(
+          `${process.env.REACT_APP_ML_API_URL}/match_jobs`,
+          {
+            skills: userSkills,
+            jobs: allJobs.map(job => ({ id: job.id || job._id, requiredSkills: job.requiredSkills || [] }))
+          }
+        ).then(res => res.data).catch(err => {
+          console.error('ML Ranking failed, using score-only sorting:', err);
+          return null;
         });
-        scores = fitRes.data || {};
-      } catch (fitErr) {
-        console.error('Error fetching batch fit scores:', fitErr);
       }
 
-      // 2. ML Ranking (Try matching but don't filter out unmatched ones)
-      if (userSkills.length > 0 && process.env.REACT_APP_ML_API_URL) {
-        try {
-          console.log('Requesting ML ranking for user skills...');
-          const matchRes = await axios.post(
-            `${process.env.REACT_APP_ML_API_URL}/match_jobs`,
-            {
-              skills: userSkills,
-              jobs: allJobs.map(job => ({ id: job.id || job._id, requiredSkills: job.requiredSkills || [] }))
-            }
-          );
+      // Wait for both concurrent requests to finish
+      const [fitData, matchData] = await Promise.all([fitPromise, mlPromise]);
+      scores = fitData || {};
 
-          const matchedIds = (matchRes.data?.matches || []).map(m => m.id || m._id);
+      if (matchData && matchData.matches && matchData.matches.length > 0) {
+        const matchedIds = matchData.matches.map(m => m.id || m._id);
+        
+        rankedJobs.sort((a, b) => {
+          const aId = a.id || a._id;
+          const bId = b.id || b._id;
+          const aMatched = matchedIds.includes(aId);
+          const bMatched = matchedIds.includes(bId);
 
-          if (matchedIds.length > 0) {
-            // Sort jobs: matched ones first, then by match score if available
-            rankedJobs.sort((a, b) => {
-              const aId = a.id || a._id;
-              const bId = b.id || b._id;
-              const aMatched = matchedIds.includes(aId);
-              const bMatched = matchedIds.includes(bId);
+          if (aMatched && !bMatched) return -1;
+          if (!aMatched && bMatched) return 1;
 
-              if (aMatched && !bMatched) return -1;
-              if (!aMatched && bMatched) return 1;
-
-              // Second sort: higher match score first
-              return (scores[bId] || 0) - (scores[aId] || 0);
-            });
-            console.log('Jobs ranked by relevance.');
-          }
-        } catch (mlErr) {
-          console.error('ML Ranking failed, using score-only sorting:', mlErr);
-          rankedJobs.sort((a, b) => (scores[b.id || b._id] || 0) - (scores[a.id || a._id] || 0));
-        }
+          // Second sort: higher match score first
+          return (scores[bId] || 0) - (scores[aId] || 0);
+        });
+        console.log('Jobs ranked by relevance.');
+      } else {
+        // Fallback to sorting purely by fit score if ML fails or returns no matches
+        rankedJobs.sort((a, b) => (scores[b.id || b._id] || 0) - (scores[a.id || a._id] || 0));
       }
 
       return { jobs: rankedJobs, totalPages, fitScores: scores, allJobs };
@@ -226,17 +228,22 @@ const StudentDashboard = () => {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 px-4 py-8">
+    <div className="min-h-screen bg-[#050B14] text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8">
+      <DashboardBackground />
       <div className="fixed top-6 right-6 z-50">
         <ProfileSection />
       </div>
 
-      <div className="max-w-7xl mx-auto space-y-8 relative z-10">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="show"
+        className="max-w-7xl mx-auto space-y-8 relative z-10"
+      >
         {/* Header */}
         <motion.div 
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="glass-panel p-8 rounded-3xl"
+          variants={itemVariants}
+          className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl p-8 rounded-3xl hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
         >
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="flex items-center space-x-4">
@@ -244,16 +251,16 @@ const StudentDashboard = () => {
                 <span className="text-2xl">🎓</span>
               </div>
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
                   Welcome back, {currentUser?.name}!
                 </h1>
-                <p className="text-cyan-300 font-semibold text-lg">Student Dashboard</p>
+                <p className="text-gray-300 font-semibold text-lg">Student Dashboard</p>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={() => navigate('/recent-jobs')}
-                className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-full font-semibold hover:from-emerald-600 hover:to-cyan-600 transition transform hover:scale-105 active:scale-95"
+                className="px-6 py-3 bg-white text-black rounded-full font-bold hover:bg-cyan-50 transition transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
               >
                 📂 View Recently Viewed Jobs
               </button>
@@ -264,10 +271,8 @@ const StudentDashboard = () => {
 
         {/* Analytics with status filtering */}
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.1 }}
-          className="glass-panel p-8 rounded-3xl"
+          variants={itemVariants} 
+          className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl p-8 rounded-3xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300"
         >
           <StudentAnalytics
             appliedJobs={appliedJobs}
@@ -278,7 +283,10 @@ const StudentDashboard = () => {
 
         {/* Applied Jobs List (Visible by default if exists, or when status clicked) */}
         {showAppliedJobs && appliedJobs.length > 0 && (
-          <div className="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl relative animate-in fade-in slide-in-from-top-4 duration-500">
+          <motion.div 
+            variants={itemVariants}
+            className="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl relative animate-in fade-in slide-in-from-top-4 duration-500 hover:border-indigo-500/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all duration-300"
+          >
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-cyan-400">
                 {statusFilter === 'approved'
@@ -298,10 +306,11 @@ const StudentDashboard = () => {
               {filteredJobs.map((application) => {
                 const jobExists = !!application.job;
                 return (
-                  <div
+                  <motion.div
+                    variants={itemVariants}
                     key={application.id || application._id}
                     className={`bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg transition ${jobExists
-                      ? 'hover:shadow-emerald-400/20 cursor-pointer'
+                      ? 'hover:border-emerald-400/50 hover:shadow-emerald-400/20 cursor-pointer'
                       : 'cursor-not-allowed'
                       }`}
                     onClick={() => jobExists && handleAppliedJobClick(application.job)}
@@ -334,20 +343,18 @@ const StudentDashboard = () => {
                         </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Skills Banner */}
         {hasUploadedResume && userSkills.length > 0 && (
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="glass-panel p-6 rounded-3xl relative overflow-hidden group"
+            variants={itemVariants}
+            className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-300 p-6 rounded-3xl relative overflow-hidden group"
           >
             {/* Decorative background element */}
             <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
@@ -388,10 +395,8 @@ const StudentDashboard = () => {
           <div className="space-y-8">
             {/* Upload Resume */}
             <motion.div 
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.2 }}
-              className="glass-panel p-8 rounded-3xl relative overflow-hidden group"
+              variants={itemVariants}
+              className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hover:border-emerald-500/50 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 p-8 rounded-3xl relative overflow-hidden group"
             >
               {/* Decorative background element */}
               <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
@@ -452,13 +457,11 @@ const StudentDashboard = () => {
 
           {/* Right Panel */}
           <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.4 }}
+            variants={itemVariants}
             className="lg:col-span-2"
           >
             {/* Recommended Jobs */}
-            <div className="glass-panel p-8 rounded-3xl">
+            <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300 p-8 rounded-3xl">
               <div className="flex items-center space-x-3 mb-6">
                 <span className="text-3xl">💼</span>
                 <h2 id="recommended-jobs-title" className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
@@ -530,7 +533,7 @@ const StudentDashboard = () => {
             </div>
           </motion.div>
         </div>
-      </div>
+      </motion.div>
 
       {showJobDetails && selectedJob && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-lg z-50 flex items-center justify-center p-4">
