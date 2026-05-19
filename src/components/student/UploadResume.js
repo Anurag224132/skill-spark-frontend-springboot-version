@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import axios from 'axios';
 
 const UploadResume = ({ onParsed }) => {
@@ -6,9 +6,20 @@ const UploadResume = ({ onParsed }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const fileInputRef = useRef(null);
+
+  const resetInput = () => {
+    // Reset the native file input so the same file can be picked again
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+    setFile(null);
+  };
 
   const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+    const selected = e.target.files[0];
+    if (!selected) return;
+    setFile(selected);
     setError('');
     setSuccess(false);
   };
@@ -34,11 +45,12 @@ const UploadResume = ({ onParsed }) => {
 
       onParsed(res.data);
       setSuccess(true);
-      setFile(null);
+      resetInput();
       setTimeout(() => setSuccess(false), 5000);
     } catch (err) {
-      setError('Failed to parse resume. Please try again.');
+      setError(err?.response?.data?.message || 'Failed to parse resume. Please try again.');
       console.error('Upload error', err);
+      resetInput(); // also reset on error so user can retry
     } finally {
       setIsLoading(false);
     }
@@ -63,6 +75,8 @@ const UploadResume = ({ onParsed }) => {
           <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200"></div>
           <div className="relative bg-slate-900 border border-white/10 rounded-xl p-1">
             <input
+              id="resume-upload-input"
+              ref={fileInputRef}
               type="file"
               accept=".pdf,.doc,.docx"
               onChange={handleFileChange}
@@ -83,7 +97,7 @@ const UploadResume = ({ onParsed }) => {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm animate-pulse flex items-center space-x-3">
+          <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm flex items-center space-x-3">
             <svg className="h-5 w-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -97,7 +111,7 @@ const UploadResume = ({ onParsed }) => {
             <svg className="h-5 w-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span className="truncate">Resume parsed successfully! See your skills above.</span>
+            <span className="truncate">Resume uploaded successfully! See your skills above.</span>
           </div>
         )}
 
@@ -113,11 +127,11 @@ const UploadResume = ({ onParsed }) => {
               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
           )}
-          {isLoading ? 'Analyzing Resume...' : 'Parse Resume'}
+          {isLoading ? 'Uploading & Analyzing...' : 'Upload Resume'}
         </button>
       </div>
 
-      <style jsx>{`
+      <style>{`
         @keyframes fade-in {
           from { opacity: 0; transform: translateY(10px); }
           to { opacity: 1; transform: translateY(0); }
@@ -131,3 +145,4 @@ const UploadResume = ({ onParsed }) => {
 };
 
 export default UploadResume;
+

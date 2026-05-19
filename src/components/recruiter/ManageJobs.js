@@ -353,14 +353,32 @@ const ManageJobs = () => {
         )}
         {/* Edit Job Modal */}
         {editModalOpen && editFormData && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white p-8 rounded-xl w-full max-w-lg relative">
-              <button onClick={() => setEditModalOpen(false)} className="absolute top-4 right-4">❌</button>
-              <h2 className="text-2xl font-bold mb-4">Edit Job</h2>
+          <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="bg-slate-900 border border-white/10 rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+              {/* Modal Header */}
+              <div className="flex items-center justify-between p-6 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-cyan-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                  </div>
+                  <h2 className="text-2xl font-bold text-white">Edit Job</h2>
+                </div>
+                <button
+                  onClick={() => setEditModalOpen(false)}
+                  className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-400 hover:text-white transition-all"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Form */}
               <form
                 onSubmit={async (e) => {
                   e.preventDefault();
-                  const token = localStorage.getItem('token');
                   const updateData = {
                     title: editFormData.title,
                     description: editFormData.description,
@@ -374,86 +392,163 @@ const ManageJobs = () => {
                     isActive: editFormData.isActive
                   };
                   try {
-                    await api.put(
-                      `/api/recruiter/jobs/${editFormData.id || editFormData._id}`,
-                      updateData
-                    );
+                    await api.put(`/api/recruiter/jobs/${editFormData.id || editFormData._id}`, updateData);
                     setEditModalOpen(false);
                     fetchJobs();
                   } catch (err) {
                     console.error(err);
-                    alert('Failed to update job');
+                    alert('Failed to update job. Please try again.');
                   }
                 }}
-                className="space-y-4"
+                className="p-6 space-y-5"
               >
-                <input type="text" value={editFormData.title}
-                  onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
-                  className="w-full p-2 border rounded"
-                  placeholder="Title"
-                />
-                <textarea value={editFormData.description}
-                  onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
-                  className="w-full p-2 border rounded"
-                  placeholder="Description"
-                  rows={4}
-                />
-                <input type="text" value={editFormData.companyName || ''}
-                  onChange={(e) => setEditFormData({ ...editFormData, companyName: e.target.value })}
-                  className="w-full p-2 border rounded"
-                  placeholder="Company Name"
-                />
-                <input type="text" value={editFormData.location || ''}
-                  onChange={(e) => setEditFormData({ ...editFormData, location: e.target.value })}
-                  className="w-full p-2 border rounded"
-                  placeholder="Location"
-                />
-                <div className="flex gap-4">
-                  <select 
-                    value={editFormData.type || ''} 
-                    onChange={(e) => setEditFormData({ ...editFormData, type: e.target.value })}
-                    className="w-1/2 p-2 border rounded"
-                  >
-                    <option value="">Job Type</option>
-                    <option value="Full-time">Full-time</option>
-                    <option value="Part-time">Part-time</option>
-                    <option value="Contract">Contract</option>
-                  </select>
-                  <select 
-                    value={editFormData.experience || ''} 
-                    onChange={(e) => setEditFormData({ ...editFormData, experience: e.target.value })}
-                    className="w-1/2 p-2 border rounded"
-                  >
-                    <option value="">Experience Level</option>
-                    <option value="Entry">Entry Level</option>
-                    <option value="Mid">Mid Level</option>
-                    <option value="Senior">Senior Level</option>
-                  </select>
-                </div>
-                <input type="text" value={editFormData.salary || ''}
-                  onChange={(e) => setEditFormData({ ...editFormData, salary: e.target.value })}
-                  className="w-full p-2 border rounded"
-                  placeholder="Salary"
-                />
-                <div className="flex items-center gap-2">
-                  <input 
-                    type="checkbox" 
-                    checked={editFormData.remote || false} 
-                    onChange={(e) => setEditFormData({ ...editFormData, remote: e.target.checked })}
-                    id="edit-remote"
+                {/* Title */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-1.5">Job Title</label>
+                  <input
+                    type="text"
+                    value={editFormData.title || ''}
+                    onChange={(e) => setEditFormData({ ...editFormData, title: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/60 focus:bg-white/10 transition-all"
+                    placeholder="e.g. Senior Frontend Developer"
+                    required
                   />
-                  <label htmlFor="edit-remote">Remote Position</label>
                 </div>
-                <input type="text" value={(editFormData.requiredSkills || []).join(', ')}
-                  onChange={(e) => setEditFormData({ ...editFormData, requiredSkills: e.target.value.split(',').map(s => s.trim()) })}
-                  className="w-full p-2 border rounded"
-                  placeholder="Required Skills (comma separated)"
-                />
-                <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">Save Changes</button>
+
+                {/* Company Name */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-1.5">Company Name</label>
+                  <input
+                    type="text"
+                    value={editFormData.companyName || ''}
+                    onChange={(e) => setEditFormData({ ...editFormData, companyName: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/60 focus:bg-white/10 transition-all"
+                    placeholder="e.g. Acme Corp"
+                  />
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-1.5">Description</label>
+                  <textarea
+                    value={editFormData.description || ''}
+                    onChange={(e) => setEditFormData({ ...editFormData, description: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/60 focus:bg-white/10 transition-all resize-none"
+                    placeholder="Describe the role and responsibilities..."
+                    rows={4}
+                  />
+                </div>
+
+                {/* Location */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-1.5">Location</label>
+                  <input
+                    type="text"
+                    value={editFormData.location || ''}
+                    onChange={(e) => setEditFormData({ ...editFormData, location: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/60 focus:bg-white/10 transition-all"
+                    placeholder="e.g. New York, NY"
+                  />
+                </div>
+
+                {/* Type & Experience */}
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-1.5">Job Type</label>
+                    <select
+                      value={editFormData.type || ''}
+                      onChange={(e) => setEditFormData({ ...editFormData, type: e.target.value })}
+                      className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500/60 transition-all"
+                    >
+                      <option value="">Select type</option>
+                      <option value="Full-time">Full-time</option>
+                      <option value="Part-time">Part-time</option>
+                      <option value="Contract">Contract</option>
+                      <option value="Internship">Internship</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-300 mb-1.5">Experience</label>
+                    <select
+                      value={editFormData.experience || ''}
+                      onChange={(e) => setEditFormData({ ...editFormData, experience: e.target.value })}
+                      className="w-full bg-slate-800 border border-white/10 rounded-xl px-4 py-2.5 text-white focus:outline-none focus:border-cyan-500/60 transition-all"
+                    >
+                      <option value="">Select level</option>
+                      <option value="Entry">Entry Level</option>
+                      <option value="Mid">Mid Level</option>
+                      <option value="Senior">Senior Level</option>
+                    </select>
+                  </div>
+                </div>
+
+                {/* Salary */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-1.5">Salary</label>
+                  <input
+                    type="text"
+                    value={editFormData.salary || ''}
+                    onChange={(e) => setEditFormData({ ...editFormData, salary: e.target.value })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/60 focus:bg-white/10 transition-all"
+                    placeholder="e.g. $80,000 – $100,000"
+                  />
+                </div>
+
+                {/* Skills */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-300 mb-1.5">Required Skills <span className="text-gray-500 font-normal">(comma separated)</span></label>
+                  <input
+                    type="text"
+                    value={(editFormData.requiredSkills || []).join(', ')}
+                    onChange={(e) => setEditFormData({ ...editFormData, requiredSkills: e.target.value.split(',').map(s => s.trim()).filter(Boolean) })}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white placeholder-gray-500 focus:outline-none focus:border-cyan-500/60 focus:bg-white/10 transition-all"
+                    placeholder="React, Node.js, PostgreSQL"
+                  />
+                </div>
+
+                {/* Toggles */}
+                <div className="flex items-center gap-6">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editFormData.remote || false}
+                      onChange={(e) => setEditFormData({ ...editFormData, remote: e.target.checked })}
+                      className="w-4 h-4 accent-cyan-500"
+                    />
+                    <span className="text-gray-300 text-sm font-medium">Remote Position</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={editFormData.isActive ?? true}
+                      onChange={(e) => setEditFormData({ ...editFormData, isActive: e.target.checked })}
+                      className="w-4 h-4 accent-emerald-500"
+                    />
+                    <span className="text-gray-300 text-sm font-medium">Active Listing</span>
+                  </label>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-3 pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditModalOpen(false)}
+                    className="flex-1 py-3 rounded-xl border border-white/10 text-gray-300 hover:bg-white/10 hover:text-white font-semibold transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all transform hover:scale-[1.02]"
+                  >
+                    Save Changes
+                  </button>
+                </div>
               </form>
             </div>
           </div>
         )}
+
       </div>
     </div>
   );
