@@ -42,6 +42,28 @@ const RecruiterDashboard = () => {
 
   const skillGaps = skillGapsData || [];
 
+  const {
+    data: unviewedCount = 0,
+    refetch: refetchUnviewedCount
+  } = useQuery({
+    queryKey: ['unviewedApplicationsCount', currentUser?.id || currentUser?._id],
+    queryFn: async () => {
+      const res = await api.get(`/api/applications/recruiter/${currentUser.id || currentUser._id}/unviewed-count`);
+      return res.data || 0;
+    },
+    enabled: !!(currentUser?.id || currentUser?._id),
+    refetchInterval: 15000, // Auto-refresh unviewed count every 15 seconds!
+  });
+
+  // Automatically refresh unviewed count if recruiter leaves or joins applicants view
+  const handleTabClick = (tabKey) => {
+    setView(tabKey);
+    if (tabKey === 'applicants') {
+      setTimeout(() => refetchUnviewedCount(), 800);
+    }
+  };
+
+
 
   return (
     <div className="min-h-screen bg-[#050B14] text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8">
@@ -93,7 +115,7 @@ const RecruiterDashboard = () => {
             ].map((tab) => (
               <button
                 key={tab.key}
-                onClick={() => setView(tab.key)}
+                onClick={() => handleTabClick(tab.key)}
                 className={`flex items-center space-x-3 px-6 md:px-8 py-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 transform hover:scale-105 ${view === tab.key
                     ? 'bg-gradient-to-r from-emerald-400 to-cyan-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] border border-white/20'
                     : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white border border-white/10'
@@ -101,6 +123,14 @@ const RecruiterDashboard = () => {
               >
                 <span className="text-xl">{tab.icon}</span>
                 <span className="hidden sm:inline font-semibold">{tab.label}</span>
+                {tab.key === 'applicants' && unviewedCount > 0 && (
+                  <span className="relative flex h-5.5 w-5.5 items-center justify-center">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-5.5 w-5.5 bg-gradient-to-r from-rose-500 to-red-500 text-[10px] text-white font-black items-center justify-center shadow-md shadow-rose-500/50 border border-white/20">
+                      {unviewedCount}
+                    </span>
+                  </span>
+                )}
               </button>
             ))}
           </div>

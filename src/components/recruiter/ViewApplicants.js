@@ -15,9 +15,14 @@ const ViewApplicants = () => {
     const [interviewDate, setInterviewDate] = useState('');
     const [notes, setNotes] = useState('');
     const [emailStatus, setEmailStatus] = useState('');
-    const [statusFilter, setStatusFilter] = useState('all'); // 'all', 'pending', 'interview_scheduled', 'rejected'
+    const [statusFilter, setStatusFilter] = useState('all');
     const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
+    // Resume viewer state
+    const [resumeViewerOpen, setResumeViewerOpen] = useState(false);
+    const [resumeUrl, setResumeUrl] = useState(null);
+    const [resumeFilename, setResumeFilename] = useState('Resume.pdf');
+    const [resumeLoading, setResumeLoading] = useState(false);
     const token = localStorage.getItem('token');
 
     const fetchApplicants = async () => {
@@ -45,39 +50,46 @@ const ViewApplicants = () => {
         }
     }, [statusFilter, applications]);
 
-    const handleDownloadResume = async (applicationId, applicantName) => {
+    const handleViewResume = async (applicationId, applicantName) => {
+        setResumeLoading(true);
         try {
-            const response = await api.get(`/api/applications/${applicationId}/download-resume`,
-                {
-                    responseType: 'blob'
-                }
-            );
+            const infoRes = await api.get(`/api/applications/${applicationId}/resume-url`);
+            const { url, isCloud, filename } = infoRes.data;
+            const safeFilename = filename || `${(applicantName || 'Applicant').replace(/\s+/g, '_')}_Resume.pdf`;
 
-            // Extract filename from content-disposition header
-            const contentDisposition = response.headers['content-disposition'];
-            let filename = `${applicantName.replace(/\s+/g, '_')}_Resume.pdf`;
-
-            if (contentDisposition) {
-                const fileNameMatch = contentDisposition.match(/filename="?(.+)"?/);
-                if (fileNameMatch.length === 2) {
-                    filename = fileNameMatch[1];
-                }
+            let blobUrl;
+            if (isCloud === 'true') {
+                // Cloudinary supports CORS * — fetch directly
+                const resp = await fetch(url);
+                if (!resp.ok) throw new Error('Failed to fetch from Cloudinary: ' + resp.status);
+                const blob = await resp.blob();
+                blobUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+            } else {
+                // Local file — serve through backend
+                const resp = await api.get(`/api/applications/${applicationId}/download-resume`, { responseType: 'blob' });
+                blobUrl = URL.createObjectURL(new Blob([resp.data], { type: 'application/pdf' }));
             }
 
-            // Create download link
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement('a');
-            link.href = url;
-            link.setAttribute('download', filename);
-            document.body.appendChild(link);
-            link.click();
-
-            // Clean up
-            link.remove();
-            window.URL.revokeObjectURL(url);
+            setResumeUrl(blobUrl);
+            setResumeFilename(safeFilename);
+            setResumeViewerOpen(true);
         } catch (err) {
-            console.error('❌ Download failed:', err);
+            console.error('❌ View resume failed:', err);
+            const msg = err?.response?.data?.message || err.message || 'Could not open resume.';
+            alert('Resume error: ' + msg);
+        } finally {
+            setResumeLoading(false);
         }
+    };
+
+    const handleForceDownload = () => {
+        if (!resumeUrl) return;
+        const a = document.createElement('a');
+        a.href = resumeUrl;
+        a.download = resumeFilename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
     };
 
     const handleOpenModal = (app, type) => {
@@ -173,66 +185,82 @@ const ViewApplicants = () => {
         <div className="bg-gradient-to-br from-white to-slate-50 p-8 rounded-3xl shadow-2xl border border-slate-200/50 relative overflow-hidden">
             {/* Modal for Accept/Reject */}
             {showModal && currentApplication && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className="bg-white rounded-2xl p-6 w-full max-w-md">
-                        <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-xl font-bold text-slate-800">
-                                {modalType === 'accept' ? 'Schedule Interview' : 'Reject Application'}
+                <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-fadeIn">
+                    <div className="bg-slate-900 border border-white/10 rounded-3xl shadow-2xl w-full max-w-md p-6 overflow-hidden">
+                        {/* Header */}
+                        <div className="flex justify-between items-center mb-6 pb-4 border-b border-white/10">
+                            <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent flex items-center gap-2">
+                                {modalType === 'accept' ? (
+                                    <>
+                                        <span className="text-emerald-400">📅</span>
+                                        Schedule Interview
+                                    </>
+                                ) : (
+                                    <>
+                                        <span className="text-rose-400">❌</span>
+                                        Reject Application
+                                    </>
+                                )}
                             </h3>
                             <button
                                 onClick={handleCloseModal}
-                                className="text-slate-500 hover:text-slate-700"
+                                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-gray-400 hover:text-white transition-all"
                             >
-                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             </button>
                         </div>
 
-                        <div className="mb-4">
-                            <label className="block text-sm font-medium text-slate-700 mb-1">
-                                Notes for Applicant
-                            </label>
-                            <textarea
-                                value={notes}
-                                onChange={(e) => setNotes(e.target.value)}
-                                className="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                placeholder="Add personal notes for the applicant..."
-                                rows={3}
-                            />
+                        {/* Body */}
+                        <div className="space-y-4 mb-6">
+                            <div>
+                                <label className="block text-sm font-semibold text-gray-300 mb-1.5">
+                                    Notes for Applicant
+                                </label>
+                                <textarea
+                                    value={notes}
+                                    onChange={(e) => setNotes(e.target.value)}
+                                    className="w-full p-3 bg-slate-800/80 border border-white/10 text-white rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 placeholder-gray-500 transition-all"
+                                    placeholder="Add personal notes for the applicant..."
+                                    rows={3}
+                                />
+                            </div>
+
+                            {modalType === 'accept' && (
+                                <>
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-300 mb-1.5">
+                                            Interview Date & Time
+                                        </label>
+                                        <input
+                                            type="datetime-local"
+                                            value={interviewDate}
+                                            onChange={(e) => setInterviewDate(e.target.value)}
+                                            className="w-full p-3 bg-slate-800/80 border border-white/10 text-white rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all scheme-dark"
+                                        />
+                                    </div>
+
+                                    {emailStatus && (
+                                        <div className={`p-4 rounded-xl border flex items-center gap-3 ${
+                                            emailStatus.includes('successfully')
+                                                ? 'bg-green-500/10 border-green-500/30 text-green-400'
+                                                : emailStatus.includes('Sending')
+                                                    ? 'bg-blue-500/10 border-blue-500/30 text-blue-400'
+                                                    : 'bg-red-500/10 border-red-500/30 text-red-400'
+                                        }`}>
+                                            <div className="flex-1 text-sm font-medium">{emailStatus}</div>
+                                        </div>
+                                    )}
+                                </>
+                            )}
                         </div>
 
-                        {modalType === 'accept' && (
-                            <>
-                                <div className="mb-4">
-                                    <label className="block text-sm font-medium text-slate-700 mb-1">
-                                        Interview Date & Time
-                                    </label>
-                                    <input
-                                        type="datetime-local"
-                                        value={interviewDate}
-                                        onChange={(e) => setInterviewDate(e.target.value)}
-                                        className="w-full p-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    />
-                                </div>
-
-                                {emailStatus && (
-                                    <div className={`mb-4 p-3 rounded-lg ${emailStatus.includes('success')
-                                        ? 'bg-green-100 text-green-700'
-                                        : emailStatus.includes('Sending')
-                                            ? 'bg-blue-100 text-blue-700'
-                                            : 'bg-red-100 text-red-700'
-                                        }`}>
-                                        {emailStatus}
-                                    </div>
-                                )}
-                            </>
-                        )}
-
-                        <div className="flex justify-end gap-3">
+                        {/* Footer */}
+                        <div className="flex justify-end gap-3 pt-4 border-t border-white/10">
                             <button
                                 onClick={handleCloseModal}
-                                className="px-4 py-2 text-slate-700 rounded-xl hover:bg-slate-100 transition-colors"
+                                className="px-5 py-2.5 bg-white/10 hover:bg-white/20 text-gray-300 rounded-xl font-semibold transition-colors"
                             >
                                 Cancel
                             </button>
@@ -245,10 +273,11 @@ const ViewApplicants = () => {
                                         handleCloseModal();
                                     }
                                 }}
-                                className={`px-4 py-2 text-white rounded-xl transition-colors ${modalType === 'accept'
-                                    ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600'
-                                    : 'bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600'
-                                    }`}
+                                className={`px-5 py-2.5 text-white rounded-xl font-semibold transition-all transform hover:scale-105 active:scale-95 shadow-lg ${
+                                    modalType === 'accept'
+                                        ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 shadow-emerald-500/25'
+                                        : 'bg-gradient-to-r from-red-500 to-rose-500 hover:from-red-600 hover:to-rose-600 shadow-red-500/25'
+                                }`}
                             >
                                 {modalType === 'accept' ? 'Send Email & Schedule' : 'Reject Application'}
                             </button>
@@ -256,6 +285,7 @@ const ViewApplicants = () => {
                     </div>
                 </div>
             )}
+
 
             {/* Background decorations */}
             <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl"></div>
@@ -401,9 +431,9 @@ const ViewApplicants = () => {
                                             </div>
                                             <div>
                                                 <h3 className="text-xl font-bold text-slate-800 group-hover:text-slate-900 transition-colors duration-200">
-                                                    {app.user?.name || 'Applicant'}
+                                                    {app.studentName || 'Applicant'}
                                                 </h3>
-                                                <p className="text-slate-600 text-sm">{app.user?.email || 'No email'}</p>
+                                                <p className="text-slate-600 text-sm">{app.studentEmail || 'No email'}</p>
                                             </div>
                                                                                 {/* Status Badge */}
                                         <div className={`px-4 py-2 rounded-full text-sm font-semibold ${
@@ -478,13 +508,16 @@ const ViewApplicants = () => {
                                                 Reject
                                             </button>
                                             <button
-                                                onClick={() => handleDownloadResume(app.id || app._id, app.user?.name || 'Resume')}
-                                                className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:scale-105 active:scale-95 flex items-center justify-center gap-2"
+                                                onClick={() => handleViewResume(app.id || app._id, app.studentName || 'Applicant')}
+                                                disabled={resumeLoading}
+                                                className="flex-1 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white px-4 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:scale-105 active:scale-95 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
                                             >
-                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16v4a2 2 0 002 2h6a2 2 0 002-2v-4m-4-4V4m0 0L5 12m7-8l7 8" />
-                                                </svg>
-                                                Download Resume
+                                                {resumeLoading ? (
+                                                    <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                                                ) : (
+                                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                                                )}
+                                                View Resume
                                             </button>
                                         </div>
                                     )}
@@ -546,6 +579,44 @@ const ViewApplicants = () => {
                     </div>
                 )}
             </div>
+
+            {/* Resume Viewer Modal */}
+            {resumeViewerOpen && resumeUrl && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4 md:p-8">
+                    <div className="bg-slate-900 rounded-3xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden border border-white/10 shadow-2xl">
+                        {/* Modal Header */}
+                        <div className="p-5 bg-slate-800/80 border-b border-white/10 flex justify-between items-center flex-shrink-0">
+                            <h3 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent flex items-center gap-2">
+                                <span className="text-2xl">📄</span>
+                                {resumeFilename.replace('_Resume.pdf', '').replace(/_/g, ' ')}'s Resume
+                            </h3>
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={handleForceDownload}
+                                    className="px-5 py-2.5 bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                                    Download
+                                </button>
+                                <button
+                                    onClick={() => { setResumeViewerOpen(false); setResumeUrl(null); }}
+                                    className="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-semibold transition-colors"
+                                >
+                                    Close
+                                </button>
+                            </div>
+                        </div>
+                        {/* PDF iframe */}
+                        <div className="flex-1 bg-white relative">
+                            <iframe
+                                src={resumeUrl}
+                                className="w-full h-full border-none absolute inset-0"
+                                title={resumeFilename}
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

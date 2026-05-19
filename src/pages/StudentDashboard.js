@@ -167,20 +167,45 @@ const StudentDashboard = () => {
 
   const handleViewResume = async () => {
     try {
-      const res = await api.get('/api/resumes/download', {
-        responseType: 'blob'
-      });
-      let type = res.headers['content-type'];
-      if (!type || type === 'application/octet-stream' || type === 'application/json') {
-        type = 'application/pdf'; // fallback to try to render pdf
+      // Get the resume URL from the backend
+      const infoRes = await api.get('/api/resumes/url');
+      const { url, isCloud } = infoRes.data;
+
+      let blobUrl;
+      if (isCloud === 'true') {
+        // Cloudinary supports CORS * — fetch directly from browser
+        const resp = await fetch(url);
+        if (!resp.ok) throw new Error('Cloudinary fetch failed: ' + resp.status);
+        const blob = await resp.blob();
+        blobUrl = URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+      } else {
+        // Local file — serve through backend
+        const resp = await api.get('/api/resumes/download', { responseType: 'blob' });
+        blobUrl = URL.createObjectURL(new Blob([resp.data], { type: 'application/pdf' }));
       }
-      const url = window.URL.createObjectURL(new Blob([res.data], { type }));
-      setResumeUrl(url);
+      setResumeUrl(blobUrl);
       setShowResumeViewer(true);
     } catch (err) {
-      console.error('Error downloading resume:', err);
-      alert('Could not open resume.');
+      console.error('Error opening resume:', err);
+      const serverMsg = err?.response?.data?.message;
+      if (serverMsg) {
+        alert('Resume error: ' + serverMsg);
+      } else {
+        alert('Could not open resume: ' + (err.message || 'Please re-upload and try again.'));
+      }
     }
+  };
+
+
+  // Force-save the blob already loaded in the viewer
+  const handleDownloadResume = () => {
+    if (!resumeUrl) return;
+    const a = document.createElement('a');
+    a.href = resumeUrl;
+    a.download = 'My_Resume.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   };
 
   const handleJobClick = (job) => {
@@ -555,14 +580,13 @@ const StudentDashboard = () => {
                 <span className="text-2xl">📄</span> Document Viewer
               </h3>
               <div className="flex gap-4">
-                <a 
-                  href={resumeUrl} 
-                  download="My_Resume"
+                <button
+                  onClick={handleDownloadResume}
                   className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                   Download
-                </a>
+                </button>
                 <button 
                   onClick={() => setShowResumeViewer(false)}
                   className="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-semibold transition-colors"
