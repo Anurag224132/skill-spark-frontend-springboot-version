@@ -95,6 +95,11 @@ const StudentDashboard = () => {
           {
             skills: userSkills,
             jobs: allJobs.map(job => ({ id: job.id || job._id, requiredSkills: job.requiredSkills || [] }))
+          },
+          {
+            headers: {
+              'X-API-Key': process.env.REACT_APP_ML_API_KEY || ''
+            }
           }
         ).then(res => res.data).catch(err => {
           console.error('ML Ranking failed, using score-only sorting:', err);
