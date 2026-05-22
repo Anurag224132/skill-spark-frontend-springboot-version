@@ -5,6 +5,7 @@ import PrivateRoute from './components/routes/PrivateRoute';
 import { AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import PageTransition from './components/common/PageTransition';
+import { Toaster } from 'react-hot-toast';
 
 // Lazy load components for code splitting
 const StudentDashboard = lazy(() => import('./pages/StudentDashboard'));
@@ -53,7 +54,35 @@ function App() {
 
   return (
     <AuthProvider>
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: 'rgba(10, 16, 29, 0.85)',
+            color: '#fff',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            borderRadius: '1rem',
+            backdropFilter: 'blur(12px)',
+            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.5)',
+            fontSize: '0.875rem',
+            padding: '12px 18px',
+          },
+          success: {
+            iconTheme: {
+              primary: '#34d399',
+              secondary: '#0a101d',
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: '#f87171',
+              secondary: '#0a101d',
+            },
+          },
+        }}
+      />
       <div className="min-h-screen bg-[#050B14] text-white">
+
         <Suspense fallback={<LoadingFallback />}>
           <AnimatePresence mode="wait">
             <Routes location={location} key={location.pathname}>
