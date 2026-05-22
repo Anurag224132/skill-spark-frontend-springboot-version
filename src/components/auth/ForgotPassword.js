@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../../utils/api';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ const ForgotPassword = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/auth/forgot-password`, { email });
+      const res = await api.post('/api/auth/forgot-password', { email });
       setMessage(res.data.msg || 'OTP sent successfully!');
       setError('');
       // Navigate to reset password page after a small delay
@@ -27,6 +27,7 @@ const ForgotPassword = () => {
       setLoading(false);
     }
   };
+
 
   return (
     <div className="min-h-screen flex bg-[#050B14] overflow-hidden relative font-sans text-white selection:bg-cyan-500/30">
