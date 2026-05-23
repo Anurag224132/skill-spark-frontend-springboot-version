@@ -32,26 +32,21 @@ const StudentDashboard = () => {
   const navigate = useNavigate();
 
   // State declarations
-  const [userSkills, setUserSkills] = useState([]);
+  const [userSkills, setUserSkills] = useState(() => {
+    return currentUser?.skills || [];
+  });
   const [statusFilter, setStatusFilter] = useState(null);
   const [selectedJob, setSelectedJob] = useState(null);
   const [showJobDetails, setShowJobDetails] = useState(false);
-  const [hasUploadedResume, setHasUploadedResume] = useState(false);
+  const [hasUploadedResume, setHasUploadedResume] = useState(() => {
+    return localStorage.getItem('hasUploadedResume') === 'true';
+  });
   const [page, setPage] = useState(0);
   const [showAppliedJobs, setShowAppliedJobs] = useState(false);
   const [showResumeViewer, setShowResumeViewer] = useState(false);
   const [resumeUrl, setResumeUrl] = useState(null);
 
-  // Check for previously uploaded resume on initial load
-  // Sync local data on mount
-  useEffect(() => {
-    const hasResume = localStorage.getItem('hasUploadedResume') === 'true';
-    if (hasResume) {
-      setHasUploadedResume(true);
-    }
-  }, []);
-
-  // Load user skills
+  // Sync user skills if currentUser changes
   useEffect(() => {
     if (currentUser?.skills?.length > 0) {
       setUserSkills(currentUser.skills);
@@ -99,7 +94,8 @@ const StudentDashboard = () => {
           {
             headers: {
               'X-API-Key': process.env.REACT_APP_ML_API_KEY || ''
-            }
+            },
+            timeout: 2000
           }
         ).then(res => res.data).catch(err => {
           console.error('ML Ranking failed, using score-only sorting:', err);
@@ -146,7 +142,7 @@ const StudentDashboard = () => {
     queryKey: ['appliedJobs', currentUser?.id || currentUser?._id],
     queryFn: async () => {
       if (!currentUser) return [];
-      const res = await api.get('/api/applications');
+      const res = await api.get('/api/applications?size=100');
       const applications = res.data.content || res.data;
       return Array.isArray(applications) ? applications.map(app => ({
         ...app,
