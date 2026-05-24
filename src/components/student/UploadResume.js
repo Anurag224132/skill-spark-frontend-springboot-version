@@ -80,7 +80,7 @@ const UploadResume = ({ onParsed }) => {
               type="file"
               accept=".pdf,.doc,.docx"
               onChange={handleFileChange}
-              className="block w-full text-sm text-gray-300 cursor-pointer focus:outline-none file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 transition-all"
+              className="block w-full text-sm text-gray-300 cursor-pointer focus:outline-none file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 file:cursor-pointer transition-all"
             />
           </div>
         </div>
@@ -119,7 +119,7 @@ const UploadResume = ({ onParsed }) => {
         <button
           onClick={handleUpload}
           disabled={isLoading || !file}
-          className="group w-full flex justify-center items-center px-4 py-3.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:from-emerald-600 hover:to-cyan-600 transition-all duration-200 transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-emerald-500/25"
+          className="group w-full flex justify-center items-center px-4 py-3.5 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white text-sm font-semibold rounded-xl hover:from-emerald-600 hover:to-cyan-600 transition-all duration-200 transform hover:-translate-y-0.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg shadow-emerald-500/25"
         >
           {isLoading && (
             <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
