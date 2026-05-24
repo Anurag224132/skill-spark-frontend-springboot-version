@@ -286,7 +286,7 @@ const StudentDashboard = () => {
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={() => navigate('/recent-jobs')}
-                className="px-6 py-3 bg-white text-black rounded-full font-bold hover:bg-cyan-50 transition transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                className="px-6 py-3 bg-white text-black rounded-full font-bold hover:bg-cyan-50 transition transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] cursor-pointer"
               >
                 📂 View Recently Viewed Jobs
               </button>
@@ -323,7 +323,7 @@ const StudentDashboard = () => {
               </h2>
               <button
                 onClick={clearFilter}
-                className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full font-semibold hover:from-purple-600 hover:to-indigo-600 transition"
+                className="px-4 py-2 bg-gradient-to-r from-purple-500 to-indigo-500 text-white rounded-full font-semibold hover:from-purple-600 hover:to-indigo-600 transition cursor-pointer"
               >
                 Close List
               </button>
@@ -445,7 +445,7 @@ const StudentDashboard = () => {
                   {hasUploadedResume && (
                     <button 
                       onClick={handleViewResume}
-                      className="px-3 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 hover:border-blue-500/40 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all shadow-sm shadow-blue-500/10 flex items-center gap-1.5"
+                      className="px-3 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 hover:border-blue-500/40 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all shadow-sm shadow-blue-500/10 flex items-center gap-1.5 cursor-pointer"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                       View
@@ -504,7 +504,7 @@ const StudentDashboard = () => {
                   </p>
                   <button
                     onClick={() => document.getElementById('resume-upload-input')?.click()}
-                    className="mt-4 px-4 py-2 bg-cyan-600 rounded-lg hover:bg-cyan-700 transition"
+                    className="mt-4 px-4 py-2 bg-cyan-600 rounded-lg hover:bg-cyan-700 transition cursor-pointer"
                   >
                     Upload Resume Now
                   </button>
@@ -583,14 +583,14 @@ const StudentDashboard = () => {
               <div className="flex gap-4">
                 <button
                   onClick={handleDownloadResume}
-                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center gap-2"
+                  className="px-5 py-2.5 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg flex items-center gap-2 cursor-pointer"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                   Download
                 </button>
                 <button 
                   onClick={() => setShowResumeViewer(false)}
-                  className="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-semibold transition-colors"
+                  className="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-semibold transition-colors cursor-pointer"
                 >
                   Close
                 </button>
