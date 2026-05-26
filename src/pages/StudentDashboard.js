@@ -277,7 +277,7 @@ const StudentDashboard = () => {
                 <span className="text-2xl">🎓</span>
               </div>
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-650 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                   Welcome back, {currentUser?.name}!
                 </h1>
                 <p className="text-slate-600 dark:text-gray-300 font-semibold text-lg">Student Dashboard</p>
@@ -346,7 +346,7 @@ const StudentDashboard = () => {
                         <h3 className="text-xl font-bold text-emerald-600 dark:text-emerald-300">
                           {application.jobTitle || (application.job && application.job.title) || 'Job no longer available'}
                         </h3>
-                        <p className="text-slate-650 dark:text-gray-300">
+                        <p className="text-slate-600 dark:text-gray-300">
                           {application.companyName || (application.job && application.job.companyName) || 'Unknown Company'}
                         </p>
                         <p className="text-slate-500 dark:text-gray-400 text-sm mt-2">
