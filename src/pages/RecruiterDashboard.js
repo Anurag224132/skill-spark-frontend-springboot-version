@@ -81,7 +81,7 @@ const RecruiterDashboard = () => {
         >
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="space-y-3">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-650 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 Recruiter Command Center
               </h1>
               {currentUser && (

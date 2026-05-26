@@ -717,7 +717,7 @@ const AdminDashboard = () => {
                             </svg>
                         </div>
                         <div>
-                            <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-650 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
+                            <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                                 Admin Dashboard
                             </h1>
                             <p className="text-slate-600 dark:text-gray-300 text-lg">System Management & Analytics</p>
