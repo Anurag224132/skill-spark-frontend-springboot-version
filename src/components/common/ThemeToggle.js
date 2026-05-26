@@ -7,41 +7,22 @@ const ThemeToggle = ({ className = "" }) => {
   return (
     <button
       onClick={toggleTheme}
-      className={`relative inline-flex h-9 w-18 items-center rounded-full transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 ${
-        theme === 'dark' ? 'bg-slate-800 border border-white/10' : 'bg-slate-200 border border-slate-300'
+      className={`flex items-center justify-center h-10 w-10 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 hover:scale-105 active:scale-95 ${
+        theme === 'dark'
+          ? 'bg-slate-800/80 border border-white/10 text-cyan-400 hover:bg-slate-700'
+          : 'bg-white border border-slate-200 text-amber-500 hover:bg-slate-50 shadow-sm'
       } ${className}`}
       aria-label="Toggle Theme"
     >
-      <span className="sr-only">Toggle dark mode</span>
-      {/* Sliding Toggle Circle */}
-      <span
-        className={`flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br transition-all duration-300 shadow-md ${
-          theme === 'dark'
-            ? 'translate-x-10 from-indigo-500 to-purple-600'
-            : 'translate-x-1 from-amber-400 to-orange-500'
-        }`}
-      >
-        {theme === 'dark' ? (
-          <svg className="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-          </svg>
-        ) : (
-          <svg className="w-3.5 h-3.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464-5.228a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zm1.878 7.518a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414zM11 16a1 1 0 11-2 0v-1a1 1 0 11-2 0v1zm-5.657-1.343a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zm-1.414-7.518a1 1 0 011.414-1.414l.707.707a1 1 0 11-1.414 1.414l-.707-.707z" clipRule="evenodd" />
-          </svg>
-        )}
-      </span>
-      {/* Background Icons */}
-      <span className="absolute left-2.5 pointer-events-none text-amber-500 opacity-80 dark:opacity-0 transition-opacity duration-300">
-        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464-5.228a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zm1.878 7.518a1 1 0 011.414 0l.707.707a1 1 0 11-1.414 1.414l-.707-.707a1 1 0 010-1.414zM11 16a1 1 0 11-2 0v-1a1 1 0 11-2 0v1zm-5.657-1.343a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zm-1.414-7.518a1 1 0 011.414-1.414l.707.707a1 1 0 11-1.414 1.414l-.707-.707z" clipRule="evenodd" />
+      {theme === 'dark' ? (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
         </svg>
-      </span>
-      <span className="absolute right-2.5 pointer-events-none text-indigo-400 opacity-0 dark:opacity-80 transition-opacity duration-300">
-        <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+      ) : (
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 3v1m0 16v1m9-9h-1M4 9H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m0-12.728l.707.707m12.728 12.728l.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" />
         </svg>
-      </span>
+      )}
     </button>
   );
 };
