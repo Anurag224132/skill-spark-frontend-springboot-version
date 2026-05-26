@@ -42,7 +42,6 @@ const UploadResume = ({ onParsed }) => {
         }
       });
 
-
       onParsed(res.data);
       setSuccess(true);
       resetInput();
@@ -63,55 +62,55 @@ const UploadResume = ({ onParsed }) => {
         <div className="flex flex-col items-center text-center">
           <div className="h-16 w-16 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 border border-emerald-400/30 rounded-2xl flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(52,211,153,0.2)] relative overflow-hidden group-hover:scale-105 group-hover:rotate-3 transition-all duration-300">
             <div className="absolute inset-0 bg-emerald-400/10 animate-[pulse_2s_ease-in-out_infinite]"></div>
-            <svg className="h-8 w-8 text-emerald-400 relative z-10 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-8 w-8 text-emerald-550 dark:text-emerald-400 relative z-10 group-hover:-translate-y-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M9 13h6m-3-3v6m5 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
           </div>
-          <p className="text-gray-400 text-sm">Supported formats: PDF, DOC, DOCX</p>
+          <p className="text-slate-500 dark:text-gray-400 text-sm">Supported formats: PDF, DOC, DOCX</p>
         </div>
 
         {/* File Input container */}
         <div className="relative group">
           <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-200"></div>
-          <div className="relative bg-slate-900 border border-white/10 rounded-xl p-1">
+          <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl p-1 transition-colors duration-300">
             <input
               id="resume-upload-input"
               ref={fileInputRef}
               type="file"
               accept=".pdf,.doc,.docx"
               onChange={handleFileChange}
-              className="block w-full text-sm text-gray-300 cursor-pointer focus:outline-none file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-500/10 file:text-emerald-400 hover:file:bg-emerald-500/20 file:cursor-pointer transition-all"
+              className="block w-full text-sm text-slate-800 dark:text-gray-300 cursor-pointer focus:outline-none file:mr-4 file:py-2.5 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-emerald-500/10 file:text-emerald-600 dark:file:text-emerald-400 hover:file:bg-emerald-500/20 file:cursor-pointer transition-all"
             />
           </div>
         </div>
 
         {/* File Selected Indicator */}
         {file && !error && (
-          <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 px-4 py-3 rounded-xl text-sm flex items-center space-x-3">
-            <svg className="h-5 w-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 dark:text-emerald-300 px-4 py-3 rounded-xl text-sm flex items-center space-x-3">
+            <svg className="h-5 w-5 text-emerald-500 dark:text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span className="truncate">{file.name}</span>
+            <span className="truncate font-semibold">{file.name}</span>
           </div>
         )}
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm flex items-center space-x-3">
-            <svg className="h-5 w-5 text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-red-500/10 border border-red-500/20 text-red-600 dark:text-red-400 px-4 py-3 rounded-xl text-sm flex items-center space-x-3">
+            <svg className="h-5 w-5 text-red-500 dark:text-red-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span className="truncate">{error}</span>
+            <span className="truncate font-semibold">{error}</span>
           </div>
         )}
 
         {/* Success Message */}
         {success && (
-          <div className="bg-emerald-500/20 border border-emerald-500/30 text-emerald-300 px-4 py-3 rounded-xl text-sm flex items-center space-x-3 animate-fade-in shadow-lg shadow-emerald-500/10">
-            <svg className="h-5 w-5 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div className="bg-emerald-500/20 border border-emerald-500/30 text-emerald-600 dark:text-emerald-300 px-4 py-3 rounded-xl text-sm flex items-center space-x-3 animate-fade-in shadow-lg shadow-emerald-500/10">
+            <svg className="h-5 w-5 text-emerald-500 dark:text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-            <span className="truncate">Resume uploaded successfully! See your skills above.</span>
+            <span className="truncate font-semibold">Resume uploaded successfully! See your skills above.</span>
           </div>
         )}
 
@@ -145,4 +144,3 @@ const UploadResume = ({ onParsed }) => {
 };
 
 export default UploadResume;
-

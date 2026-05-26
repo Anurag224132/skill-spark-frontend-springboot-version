@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api from '../../utils/api';
+import ThemeToggle from '../../components/common/ThemeToggle';
 
 const Signup = () => {
   const [name, setName] = useState('');
@@ -74,7 +75,6 @@ const Signup = () => {
     }
   };
 
-
   const handleResendOtp = async () => {
     setError('');
     setLoading(true);
@@ -93,48 +93,53 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-[#050B14] overflow-hidden relative font-sans text-white selection:bg-cyan-500/30">
+    <div className="min-h-screen flex bg-slate-50 dark:bg-[#050B14] overflow-hidden relative font-sans text-slate-900 dark:text-white transition-colors duration-300 selection:bg-cyan-500/30">
+      {/* Theme Toggle Positioned in Top Corner */}
+      <div className="absolute top-6 right-6 z-50">
+        <ThemeToggle />
+      </div>
+
       {/* Animated Background Orbs */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-cyan-600/10 rounded-full blur-[120px] mix-blend-screen animate-pulse"></div>
-        <div className="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] bg-emerald-600/10 rounded-full blur-[120px] mix-blend-screen animate-pulse delay-2000"></div>
+        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-cyan-600/5 dark:bg-cyan-600/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse"></div>
+        <div className="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] bg-emerald-600/5 dark:bg-emerald-600/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse delay-2000"></div>
       </div>
 
       {/* Left Side: Branding / Copy (Hidden on mobile) */}
-      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-12 xl:px-24 relative z-10 border-r border-white/10 bg-black/20">
+      <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-12 xl:px-24 relative z-10 border-r border-slate-200 dark:border-white/10 bg-slate-100/50 dark:bg-black/20">
         <Link to="/" className="text-2xl font-black tracking-tight flex items-center gap-2 mb-12 group w-fit">
           <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-500/20 group-hover:shadow-cyan-500/40 transition-shadow">
               <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
               </svg>
           </span>
-          <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">SkillSpark</span>
+          <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">SkillSpark</span>
         </Link>
         
-        <h1 className="text-5xl font-black text-white leading-tight mb-6">
-          Start your journey with <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">SkillSpark</span> today.
+        <h1 className="text-5xl font-black text-slate-900 dark:text-white leading-tight mb-6">
+          Start your journey with <span className="bg-gradient-to-r from-emerald-600 to-cyan-500 bg-clip-text text-transparent">SkillSpark</span> today.
         </h1>
-        <p className="text-gray-400 text-lg mb-10 leading-relaxed max-w-lg">
+        <p className="text-slate-600 dark:text-gray-400 text-lg mb-10 leading-relaxed max-w-lg">
           Create an account to unlock personalized career opportunities, smart tracking, and intelligent skill analytics.
         </p>
         
         <div className="space-y-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-cyan-500/10 flex items-center justify-center border border-cyan-500/20">
-              <svg className="w-6 h-6 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+              <svg className="w-6 h-6 text-cyan-600 dark:text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
             </div>
             <div>
-              <h3 className="font-bold text-white">One Account, Endless Jobs</h3>
-              <p className="text-sm text-gray-400">Access thousands of job opportunities.</p>
+              <h3 className="font-bold text-slate-800 dark:text-white">One Account, Endless Jobs</h3>
+              <p className="text-sm text-slate-600 dark:text-gray-400">Access thousands of job opportunities.</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
-              <svg className="w-6 h-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             </div>
             <div>
-              <h3 className="font-bold text-white">Direct Messaging</h3>
-              <p className="text-sm text-gray-400">Connect directly with top recruiters.</p>
+              <h3 className="font-bold text-slate-800 dark:text-white">Direct Messaging</h3>
+              <p className="text-sm text-slate-600 dark:text-gray-400">Connect directly with top recruiters.</p>
             </div>
           </div>
         </div>
@@ -145,49 +150,49 @@ const Signup = () => {
         <div className="max-w-md w-full space-y-8 animate-slide-fade">
           
           <div className="text-center lg:text-left">
-            <Link to="/" className="lg:hidden text-2xl font-black tracking-tight flex items-center justify-center gap-2 mb-8 group">
+            <Link to="/" className="lg:hidden text-2xl font-black tracking-tight flex items-center justify-center gap-2 mb-8 group w-fit mx-auto">
               <span className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center shadow-lg shadow-cyan-500/20">
                   <svg className="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
               </span>
-              <span className="bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent">SkillSpark</span>
+              <span className="bg-gradient-to-r from-slate-900 to-slate-700 dark:from-white dark:to-gray-400 bg-clip-text text-transparent">SkillSpark</span>
             </Link>
 
-            <h2 className="text-3xl md:text-4xl font-black text-white mb-2">
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 dark:text-white mb-2">
               {step === 'register' ? 'Join SkillSpark' : 'Verify Your Email'}
             </h2>
-            <p className="text-gray-400 text-sm mt-2 leading-relaxed">
+            <p className="text-slate-600 dark:text-gray-400 text-sm mt-2 leading-relaxed">
               {step === 'register' 
                 ? 'Create an account to unlock your career potential.' 
                 : `We've sent a 6-digit verification code to ${email}`}
             </p>
           </div>
 
-          <div className="bg-white/[0.03] border border-white/10 p-8 rounded-3xl backdrop-blur-xl shadow-2xl">
+          <div className="bg-white dark:bg-white/[0.03] border border-slate-200 dark:border-white/10 p-8 rounded-3xl backdrop-blur-xl shadow-lg dark:shadow-2xl">
             {error && (
               <div className="mb-6 bg-red-500/10 border border-red-500/30 p-4 rounded-xl flex items-center gap-3">
-                <svg className="w-5 h-5 text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <p className="text-red-400 text-sm font-medium">{error}</p>
+                <svg className="w-5 h-5 text-red-500 dark:text-red-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <p className="text-red-600 dark:text-red-400 text-sm font-medium">{error}</p>
               </div>
             )}
 
             {step === 'register' ? (
               <form className="space-y-6" onSubmit={handleRegister}>
                 <div className="space-y-2">
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-400">Full Name</label>
+                  <label htmlFor="name" className="block text-sm font-medium text-slate-600 dark:text-gray-400">Full Name</label>
                   <input id="name" type="text" required value={name} onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all" placeholder="Enter your full name" />
+                    className="w-full px-4 py-3 bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all" placeholder="Enter your full name" />
                 </div>
                 
                 <div className="space-y-2">
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-400">Email Address</label>
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-600 dark:text-gray-400">Email Address</label>
                   <input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all" placeholder="Enter your email address" />
+                    className="w-full px-4 py-3 bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all" placeholder="Enter your email address" />
                 </div>
                 
                 <div className="space-y-2">
-                  <label htmlFor="password" className="block text-sm font-medium text-gray-400">Password</label>
+                  <label htmlFor="password" className="block text-sm font-medium text-slate-600 dark:text-gray-400">Password</label>
                   <div className="relative">
                     <input
                       id="password"
@@ -195,7 +200,7 @@ const Signup = () => {
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="w-full pl-4 pr-12 py-3 bg-black/50 border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
+                      className="w-full pl-4 pr-12 py-3 bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
                       placeholder="Create a strong password"
                     />
                     <button
@@ -214,13 +219,15 @@ const Signup = () => {
                 </div>
 
                 <div className="space-y-2">
-                  <label htmlFor="role" className="block text-sm font-medium text-gray-400">I am a...</label>
-                  <select id="role" value={role} onChange={(e) => setRole(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all appearance-none cursor-pointer">
-                    <option value="student" className="bg-[#050B14]">🎓 Student</option>
-                    <option value="recruiter" className="bg-[#050B14]">💼 Recruiter</option>
-                    <option value="admin" className="bg-[#050B14]">⚡ Admin</option>
-                  </select>
+                  <label htmlFor="role" className="block text-sm font-medium text-slate-600 dark:text-gray-400">I am a...</label>
+                  <div className="relative">
+                    <select id="role" value={role} onChange={(e) => setRole(e.target.value)}
+                      className="w-full px-4 py-3 bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all appearance-none cursor-pointer">
+                      <option value="student" className="bg-white dark:bg-[#050B14] text-slate-900 dark:text-white">🎓 Student</option>
+                      <option value="recruiter" className="bg-white dark:bg-[#050B14] text-slate-900 dark:text-white">💼 Recruiter</option>
+                      <option value="admin" className="bg-white dark:bg-[#050B14] text-slate-900 dark:text-white">⚡ Admin</option>
+                    </select>
+                  </div>
                 </div>
 
                 <button type="submit" disabled={loading} className="w-full py-4 mt-2 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-black font-bold rounded-xl transition-all transform hover:scale-[1.02] shadow-[0_0_20px_rgba(6,182,212,0.3)] disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2">
@@ -235,12 +242,12 @@ const Signup = () => {
                 </button>
 
                 <div className="text-center mt-6">
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-slate-600 dark:text-gray-400 text-sm">
                     Already have an account?{' '}
                     <button
                       type="button"
                       onClick={() => navigate('/login')}
-                      className="font-bold text-white hover:text-cyan-400 transition-colors"
+                      className="font-bold text-slate-800 dark:text-white hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
                     >
                       Back to Login
                     </button>
@@ -250,14 +257,14 @@ const Signup = () => {
             ) : (
               <form className="space-y-6" onSubmit={handleVerify}>
                 <div className="space-y-2">
-                  <label htmlFor="otp" className="block text-sm font-medium text-gray-400">Verification Code</label>
+                  <label htmlFor="otp" className="block text-sm font-medium text-slate-600 dark:text-gray-400">Verification Code</label>
                   <input id="otp" type="text" required value={otp} maxLength={6} inputMode="numeric"
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    className="w-full px-4 py-3 bg-black/50 border border-white/10 rounded-xl text-white placeholder-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all tracking-[0.5em] text-center font-mono text-xl" placeholder="••••••" />
-                  <p className="text-sm text-gray-500 mt-2 text-center">Check your email for the verification code</p>
+                    className="w-full px-4 py-3 bg-white dark:bg-black/50 border border-slate-200 dark:border-white/10 rounded-xl text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-gray-600 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all tracking-[0.5em] text-center font-mono text-xl" placeholder="••••••" />
+                  <p className="text-sm text-slate-500 dark:text-gray-500 mt-2 text-center">Check your email for the verification code</p>
                   <div className="text-center">
                     <button type="button" onClick={handleResendOtp} disabled={loading}
-                      className="text-sm font-medium text-cyan-400 hover:text-cyan-300 mt-2 transition-colors disabled:opacity-50">
+                      className="text-sm font-medium text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 mt-2 transition-colors disabled:opacity-50">
                       Resend OTP
                     </button>
                   </div>
@@ -275,7 +282,7 @@ const Signup = () => {
                 </button>
                 
                 <div className="text-center mt-6">
-                  <button type="button" onClick={() => setStep('register')} className="text-sm text-gray-400 hover:text-white transition-colors">
+                  <button type="button" onClick={() => setStep('register')} className="text-sm text-slate-550 dark:text-gray-400 hover:text-slate-900 dark:hover:text-white transition-colors">
                     ← Go back to registration
                   </button>
                 </div>

@@ -148,7 +148,7 @@ const HomePage = () => {
                             transition={{ duration: 0.8, delay: 0.3 }}
                             className="flex flex-col sm:flex-row justify-center items-center gap-4"
                         >
-                             <Link to="/signup" className="w-full sm:w-auto px-8 py-4 text-base font-bold rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 border border-slate-900 dark:border-transparent hover:scale-105 transition-all shadow-[0_0_30px_rgba(0,0,0,0.08)] dark:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2">
+                             <Link to="/signup" className="w-full sm:w-auto px-8 py-4 text-base font-bold rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 border border-slate-900 dark:border-transparent hover:scale-105 transition-all shadow-[0_0_30px_rgba(0,0,0,0.08)] dark:shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center justify-center gap-2">
                                 Start Hiring / Applying
                                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
                             </Link>
@@ -440,7 +440,7 @@ const HomePage = () => {
                             <h2 className="text-5xl md:text-7xl font-black text-slate-900 dark:text-white mb-8 tracking-tight">Ready to spark <br/> your career?</h2>
                             <p className="text-xl text-cyan-900/70 dark:text-cyan-100/70 mb-10 max-w-2xl mx-auto">Join thousands of students and top-tier companies using SkillSpark to make hiring intelligent, fair, and incredibly fast.</p>
                             <div className="flex flex-col sm:flex-row justify-center gap-4">
-                                <Link to="/signup" className="px-10 py-5 text-lg font-bold rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-950 border border-slate-900 dark:border-transparent hover:scale-105 transition-transform shadow-[0_0_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_40px_rgba(255,255,255,0.3)]">
+                                <Link to="/signup" className="px-10 py-5 text-lg font-bold rounded-full bg-slate-900 dark:bg-white text-white dark:text-slate-900 border border-slate-900 dark:border-transparent hover:scale-105 transition-transform shadow-[0_0_40px_rgba(0,0,0,0.08)] dark:shadow-[0_0_40px_rgba(255,255,255,0.3)]">
                                     Create Free Account
                                 </Link>
                                 <Link to="/login" className="px-10 py-5 text-lg font-bold rounded-full bg-slate-100 dark:bg-white/5 border border-slate-300 dark:border-white/20 text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-white/10 transition-colors">
