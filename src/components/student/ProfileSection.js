@@ -45,49 +45,49 @@ const ProfileSection = () => {
           ></div>
 
           {/* Profile Popup */}
-          <div className="fixed bottom-24 right-6 bg-gradient-to-br from-slate-800 to-slate-900 p-6 rounded-3xl shadow-2xl border border-slate-700/50 text-white backdrop-blur-lg w-[90%] max-w-md z-50 overflow-y-auto max-h-[80vh]">
+          <div className="fixed bottom-24 right-6 bg-gradient-to-br from-white to-slate-50 dark:from-slate-800 dark:to-slate-900 p-6 rounded-3xl shadow-2xl border border-slate-200 dark:border-slate-700/50 text-slate-800 dark:text-white backdrop-blur-lg w-[90%] max-w-md z-50 overflow-y-auto max-h-[80vh] transition-colors duration-300">
             <div className="flex items-center mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-teal-500 rounded-xl flex items-center justify-center mr-3 shadow-md">
                 <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
-              <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+              <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
                 Your Profile
               </h2>
             </div>
 
             {/* Profile Info */}
             <div className="space-y-3 mb-4">
-              <div className="p-3 bg-slate-800/60 rounded-xl flex items-center gap-3">
-                <span className="text-slate-400 text-sm">Name:</span>
-                <span className="text-white font-semibold">{currentUser?.name}</span>
+              <div className="p-3 bg-slate-100/80 dark:bg-slate-800/60 rounded-xl flex items-center gap-3 border border-slate-200/50 dark:border-transparent">
+                <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">Name:</span>
+                <span className="text-slate-800 dark:text-white font-semibold">{currentUser?.name}</span>
               </div>
-              <div className="p-3 bg-slate-800/60 rounded-xl flex items-center gap-3">
-                <span className="text-slate-400 text-sm">Email:</span>
-                <span className="text-white font-semibold">{currentUser?.email}</span>
+              <div className="p-3 bg-slate-100/80 dark:bg-slate-800/60 rounded-xl flex items-center gap-3 border border-slate-200/50 dark:border-transparent">
+                <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">Email:</span>
+                <span className="text-slate-800 dark:text-white font-semibold truncate">{currentUser?.email}</span>
               </div>
-              <div className="p-3 bg-slate-800/60 rounded-xl flex items-center gap-3">
-                <span className="text-slate-400 text-sm">Role:</span>
-                <span className="text-white font-semibold capitalize">{currentUser?.role}</span>
+              <div className="p-3 bg-slate-100/80 dark:bg-slate-800/60 rounded-xl flex items-center gap-3 border border-slate-200/50 dark:border-transparent">
+                <span className="text-slate-500 dark:text-slate-400 text-sm font-medium">Role:</span>
+                <span className="text-slate-800 dark:text-white font-semibold capitalize">{currentUser?.role}</span>
               </div>
             </div>
 
             {/* Skills */}
             <div className="mb-4">
-              <h3 className="text-lg font-semibold mb-2 text-emerald-400">Skills & Expertise</h3>
+              <h3 className="text-lg font-semibold mb-2 text-emerald-600 dark:text-emerald-400">Skills & Expertise</h3>
               {skills.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {skills.map((skill, idx) => (
                     <div
                       key={idx}
-                      className="bg-emerald-500/20 text-emerald-300 px-3 py-1 rounded-full text-sm flex items-center gap-1"
+                      className="bg-emerald-500/10 dark:bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 px-3 py-1 rounded-full text-sm flex items-center gap-1 border border-emerald-250/20"
                     >
                       {skill}
                       {editing && (
                         <button
                           onClick={() => handleRemoveSkill(skill)}
-                          className="text-red-400 hover:text-red-300 text-xs"
+                          className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 text-xs font-bold ml-1"
                         >
                           ✕
                         </button>
@@ -96,7 +96,7 @@ const ProfileSection = () => {
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-400 text-sm">No skills added yet.</p>
+                <p className="text-slate-500 dark:text-slate-400 text-sm">No skills added yet.</p>
               )}
             </div>
 
@@ -108,7 +108,7 @@ const ProfileSection = () => {
                   value={newSkill}
                   onChange={(e) => setNewSkill(e.target.value)}
                   placeholder="Add a skill..."
-                  className="flex-1 rounded-xl px-3 py-2 bg-slate-700 text-white placeholder-slate-400 focus:outline-none"
+                  className="flex-1 rounded-xl px-3 py-2 bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white placeholder-slate-400 dark:placeholder-gray-500 focus:outline-none border border-slate-200 dark:border-white/10"
                   onKeyPress={(e) => e.key === 'Enter' && handleAddSkill()}
                 />
                 <button
@@ -123,7 +123,7 @@ const ProfileSection = () => {
             {/* Action Button */}
             <button
               onClick={() => (editing ? handleSave() : setEditing(true))}
-              className={`w-full py-3 rounded-xl font-semibold transition ${editing
+              className={`w-full py-3 rounded-xl font-semibold transition text-white ${editing
                 ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600'
                 : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600'
                 }`}

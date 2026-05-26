@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import JobCard from './JobCard';
 import JobDetails from './JobDetails';
 import { useNavigate } from 'react-router-dom';
+import ThemeToggle from '../common/ThemeToggle';
 
 const RecentJobsPage = () => {
   const [recentJobs, setRecentJobs] = useState([]);
@@ -32,25 +33,30 @@ const RecentJobsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900 px-4 py-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white transition-colors duration-300 px-4 py-8 relative">
+      {/* Theme Toggle Positioned in Top Corner */}
+      <div className="absolute top-6 right-6 z-50">
+        <ThemeToggle />
+      </div>
+
       <div className="max-w-5xl mx-auto space-y-8">
-        <div className="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl">
+        <div className="bg-white/70 dark:bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl">
           {recentJobs.length > 0 ? (
             <>
-              <div className="flex flex-col md:flex-row justify-between md:items-center mb-6 space-y-4 md:space-y-0">
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-400 via-cyan-400 to-blue-400 bg-clip-text text-transparent">
+              <div className="flex flex-col md:flex-row justify-between md:items-center mb-6 space-y-4 md:space-y-0 pr-16">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-emerald-500 via-cyan-500 to-blue-500 dark:from-emerald-400 dark:via-cyan-400 dark:to-blue-400 bg-clip-text text-transparent">
                   Recently Viewed Jobs
                 </h1>
                 <div className="flex gap-4">
                   <button
                     onClick={handleClearAll}
-                    className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition transform hover:scale-105 active:scale-95"
+                    className="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-700 transition transform hover:scale-105 active:scale-95 shadow-md"
                   >
                     Clear All
                   </button>
                   <button
                     onClick={() => navigate('/dashboard')}
-                    className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-full font-semibold hover:from-emerald-600 hover:to-cyan-600 transition transform hover:scale-105 active:scale-95"
+                    className="px-4 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-full font-semibold hover:from-emerald-600 hover:to-cyan-600 transition transform hover:scale-105 active:scale-95 shadow-md"
                   >
                     Back to Dashboard
                   </button>
@@ -70,7 +76,7 @@ const RecentJobsPage = () => {
                       className="absolute top-4 right-4 bg-red-600 hover:bg-red-700 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                       title="Remove"
                     >
-                      ❌
+                      ✕
                     </button>
                   </div>
                 ))}
@@ -79,10 +85,10 @@ const RecentJobsPage = () => {
           ) : (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">📂</div>
-              <p className="text-gray-300 text-lg">No recently viewed jobs available.</p>
+              <p className="text-slate-650 dark:text-gray-300 text-lg">No recently viewed jobs available.</p>
               <button
                 onClick={() => navigate('/dashboard')}
-                className="mt-6 px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-full font-semibold hover:from-emerald-600 hover:to-cyan-600 transition transform hover:scale-105 active:scale-95"
+                className="mt-6 px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white rounded-full font-semibold hover:from-emerald-600 hover:to-cyan-600 transition transform hover:scale-105 active:scale-95 shadow-md"
               >
                 Back to Dashboard
               </button>
