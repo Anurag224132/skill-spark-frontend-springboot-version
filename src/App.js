@@ -22,7 +22,7 @@ const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const ContactUs = lazy(() => import('./pages/ContactUs'));
 
 const LoadingFallback = () => (
-  <div className="flex justify-center items-center min-h-screen bg-[#050B14]">
+  <div className="flex justify-center items-center min-h-screen bg-slate-50 dark:bg-[#050B14] transition-colors duration-300">
     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-cyan-500"></div>
   </div>
 );
@@ -81,7 +81,7 @@ function App() {
           },
         }}
       />
-      <div className="min-h-screen bg-[#050B14] text-white">
+      <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#050B14] dark:text-white transition-colors duration-300">
 
         <Suspense fallback={<LoadingFallback />}>
           <AnimatePresence mode="wait">

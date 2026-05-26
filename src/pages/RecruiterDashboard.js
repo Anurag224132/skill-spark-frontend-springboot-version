@@ -10,6 +10,7 @@ import SkillGapAnalysis from '../components/recruiter/SkillGapAnalysis';
 import LogoutButton from '../components/common/LogoutButton';
 import { useAuth } from '../context/AuthContext';
 import DashboardBackground from '../components/common/DashboardBackground';
+import ThemeToggle from '../components/common/ThemeToggle';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -27,6 +28,7 @@ const itemVariants = {
 const RecruiterDashboard = () => {
   const [view, setView] = useState('manage');
   const { currentUser } = useAuth();
+  
   // Use React Query for fetching global skill gap data
   const {
     data: skillGapsData,
@@ -52,7 +54,7 @@ const RecruiterDashboard = () => {
       return res.data || 0;
     },
     enabled: !!(currentUser?.id || currentUser?._id),
-    refetchInterval: 15000, // Auto-refresh unviewed count every 15 seconds!
+    refetchInterval: 15000,
   });
 
   // Automatically refresh unviewed count if recruiter leaves or joins applicants view
@@ -63,10 +65,8 @@ const RecruiterDashboard = () => {
     }
   };
 
-
-
   return (
-    <div className="min-h-screen bg-[#050B14] text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8 transition-colors duration-300">
       <DashboardBackground />
       <motion.div 
         variants={containerVariants}
@@ -74,14 +74,14 @@ const RecruiterDashboard = () => {
         animate="show"
         className="relative z-10 max-w-7xl mx-auto space-y-8"
       >
-        {/* Dark Theme Header */}
+        {/* Header */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group"
+          className="bg-white/70 dark:bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300 group"
         >
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div className="space-y-3">
-              <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-650 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                 Recruiter Command Center
               </h1>
               {currentUser && (
@@ -90,20 +90,23 @@ const RecruiterDashboard = () => {
                     {currentUser.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-white font-bold text-lg">Welcome back, {currentUser.name}</p>
-                    <p className="text-cyan-300 text-sm font-medium">🎯 {currentUser.role}</p>
+                    <p className="text-slate-800 dark:text-white font-bold text-lg">Welcome back, {currentUser.name}</p>
+                    <p className="text-cyan-600 dark:text-cyan-300 text-sm font-medium">🎯 {currentUser.role}</p>
                   </div>
                 </div>
               )}
             </div>
-            <LogoutButton />
+            <div className="flex items-center gap-4">
+              <ThemeToggle />
+              <LogoutButton />
+            </div>
           </div>
         </motion.div>
 
         {/* Navigation */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-2xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300"
+          className="bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 p-8 rounded-3xl shadow-xl dark:shadow-2xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300"
         >
           <div className="flex flex-wrap gap-3 md:gap-4">
             {[
@@ -118,7 +121,7 @@ const RecruiterDashboard = () => {
                 onClick={() => handleTabClick(tab.key)}
                 className={`flex items-center space-x-3 px-6 md:px-8 py-4 rounded-xl font-bold text-sm md:text-base transition-all duration-300 transform hover:scale-105 ${view === tab.key
                     ? 'bg-gradient-to-r from-emerald-400 to-cyan-500 text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] border border-white/20'
-                    : 'bg-white/5 text-gray-300 hover:bg-white/10 hover:text-white border border-white/10'
+                    : 'bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-white/10 hover:text-slate-900 dark:hover:text-white border border-slate-200 dark:border-white/10'
                   }`}
               >
                 <span className="text-xl">{tab.icon}</span>
@@ -136,7 +139,7 @@ const RecruiterDashboard = () => {
           </div>
         </motion.div>
 
-        {/* Dynamic Content with Dark Theme */}
+        {/* Dynamic Content */}
         <motion.div 
           variants={itemVariants}
           className="transition-all duration-700 ease-in-out"
@@ -150,11 +153,11 @@ const RecruiterDashboard = () => {
               transition={{ duration: 0.3 }}
             >
               {view === 'manage' && <ManageJobs />}
-          {view === 'post' && (
-            <PostJob onJobPosted={() => setView('manage')} />
-          )}
-          {view === 'applicants' && <ViewApplicants />}
-          {view === 'analytics' && <RecruiterAnalytics />}
+              {view === 'post' && (
+                <PostJob onJobPosted={() => setView('manage')} />
+              )}
+              {view === 'applicants' && <ViewApplicants />}
+              {view === 'analytics' && <RecruiterAnalytics />}
               {view === 'skillgap' && (
                 <SkillGapAnalysis 
                   gaps={skillGaps} 
