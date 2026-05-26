@@ -13,6 +13,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import DashboardBackground from '../components/common/DashboardBackground';
+import ThemeToggle from '../components/common/ThemeToggle';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -197,7 +198,6 @@ const StudentDashboard = () => {
     }
   };
 
-
   // Force-save the blob already loaded in the viewer
   const handleDownloadResume = () => {
     if (!resumeUrl) return;
@@ -252,11 +252,11 @@ const StudentDashboard = () => {
     setShowAppliedJobs(false);
   };
 
-
   return (
-    <div className="min-h-screen bg-[#050B14] text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8">
+    <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8 transition-colors duration-300">
       <DashboardBackground />
-      <div className="fixed top-6 right-6 z-50">
+      <div className="fixed top-6 right-6 z-50 flex items-center gap-4">
+        <ThemeToggle />
         <ProfileSection />
       </div>
 
@@ -269,7 +269,7 @@ const StudentDashboard = () => {
         {/* Header */}
         <motion.div 
           variants={itemVariants}
-          className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl p-8 rounded-3xl hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
+          className="bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl p-8 rounded-3xl hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
         >
           <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
             <div className="flex items-center space-x-4">
@@ -277,16 +277,16 @@ const StudentDashboard = () => {
                 <span className="text-2xl">🎓</span>
               </div>
               <div>
-                <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-650 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                   Welcome back, {currentUser?.name}!
                 </h1>
-                <p className="text-gray-300 font-semibold text-lg">Student Dashboard</p>
+                <p className="text-slate-600 dark:text-gray-300 font-semibold text-lg">Student Dashboard</p>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={() => navigate('/recent-jobs')}
-                className="px-6 py-3 bg-white text-black rounded-full font-bold hover:bg-cyan-50 transition transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(255,255,255,0.1)] cursor-pointer"
+                className="px-6 py-3 bg-slate-900 dark:bg-white text-white dark:text-black rounded-full font-bold hover:bg-slate-800 dark:hover:bg-cyan-50 transition transform hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(0,0,0,0.05)] dark:shadow-[0_0_20px_rgba(255,255,255,0.1)] cursor-pointer"
               >
                 📂 View Recently Viewed Jobs
               </button>
@@ -298,7 +298,7 @@ const StudentDashboard = () => {
         {/* Analytics with status filtering */}
         <motion.div 
           variants={itemVariants} 
-          className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl p-8 rounded-3xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300"
+          className="bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl p-8 rounded-3xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300"
         >
           <StudentAnalytics
             appliedJobs={appliedJobs}
@@ -307,14 +307,14 @@ const StudentDashboard = () => {
           />
         </motion.div>
 
-        {/* Applied Jobs List (Visible by default if exists, or when status clicked) */}
+        {/* Applied Jobs List */}
         {showAppliedJobs && appliedJobs.length > 0 && (
           <motion.div 
             variants={itemVariants}
-            className="bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl relative animate-in fade-in slide-in-from-top-4 duration-500 hover:border-indigo-500/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all duration-300"
+            className="bg-white/70 dark:bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl relative animate-in fade-in slide-in-from-top-4 duration-500 hover:border-indigo-500/50 hover:shadow-[0_0_30px_rgba(99,102,241,0.15)] transition-all duration-300"
           >
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold text-cyan-400">
+              <h2 className="text-2xl font-bold text-cyan-600 dark:text-cyan-400">
                 {statusFilter === 'approved'
                   ? 'Approved Applications'
                   : statusFilter
@@ -335,34 +335,34 @@ const StudentDashboard = () => {
                   <motion.div
                     variants={itemVariants}
                     key={application.id || application._id}
-                    className={`bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-white/20 shadow-lg transition ${jobExists
+                    className={`bg-slate-100/60 dark:bg-white/10 backdrop-blur-sm p-6 rounded-2xl border border-slate-200 dark:border-white/20 shadow-lg transition ${jobExists
                       ? 'hover:border-emerald-400/50 hover:shadow-emerald-400/20 cursor-pointer'
                       : 'cursor-not-allowed'
                       }`}
                     onClick={() => jobExists && handleAppliedJobClick(application.job)}
                   >
                     <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-emerald-300">
+                       <div className="flex-1">
+                        <h3 className="text-xl font-bold text-emerald-600 dark:text-emerald-300">
                           {application.jobTitle || (application.job && application.job.title) || 'Job no longer available'}
                         </h3>
-                        <p className="text-gray-300">
+                        <p className="text-slate-650 dark:text-gray-300">
                           {application.companyName || (application.job && application.job.companyName) || 'Unknown Company'}
                         </p>
-                        <p className="text-gray-400 text-sm mt-2">
+                        <p className="text-slate-500 dark:text-gray-400 text-sm mt-2">
                           Applied on: {new Date(application.createdAt).toLocaleDateString()}
                         </p>
                       </div>
                       <div className="mt-4 md:mt-0 flex flex-col items-start md:items-end">
                         <span className={`px-3 py-1 rounded-full text-sm font-semibold ${application.status === 'pending'
-                          ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-300/30'
+                          ? 'bg-yellow-500/10 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-300 border border-yellow-500/20 dark:border-yellow-300/30'
                           : application.status === 'approved'
-                            ? 'bg-green-500/20 text-green-300 border border-green-300/30'
-                            : 'bg-red-500/20 text-red-300 border border-red-300/30'
+                            ? 'bg-green-500/10 dark:bg-green-500/20 text-green-600 dark:text-green-300 border border-green-500/20 dark:border-green-300/30'
+                            : 'bg-red-500/10 dark:bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/20 dark:border-red-300/30'
                           }`}>
                           {application.status.toUpperCase()}
                         </span>
-                        <div className="text-sm text-gray-300 mt-2">
+                        <div className="text-sm text-slate-600 dark:text-gray-300 mt-2">
                           <p>Recruiter: {application.job && application.job.recruiter
                             ? application.job.recruiter.name
                             : 'N/A'}</p>
@@ -380,19 +380,18 @@ const StudentDashboard = () => {
         {hasUploadedResume && userSkills.length > 0 && (
           <motion.div 
             variants={itemVariants}
-            className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-300 p-6 rounded-3xl relative overflow-hidden group"
+            className="bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-300 p-6 rounded-3xl relative overflow-hidden group"
           >
-            {/* Decorative background element */}
             <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 bg-gradient-to-br from-blue-500/10 to-purple-500/10 rounded-full blur-3xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
 
             <div className="flex flex-col md:flex-row md:items-center gap-6 relative z-10">
-              <div className="flex items-center space-x-4 shrink-0 md:pr-6 md:border-r border-white/10">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-xl flex items-center justify-center border border-blue-400/20 shadow-lg shadow-blue-500/5">
+              <div className="flex items-center space-x-4 shrink-0 md:pr-6 md:border-r border-slate-200 dark:border-white/10">
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-450/10 to-purple-450/10 dark:from-blue-400/20 dark:to-purple-400/20 rounded-xl flex items-center justify-center border border-blue-400/10 dark:border-blue-400/20 shadow-sm">
                   <span className="text-2xl group-hover:rotate-12 transition-transform">🎯</span>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">Extracted Skills</h2>
-                  <p className="text-xs text-blue-200/60 mt-0.5">Found in your resume</p>
+                  <h2 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent">Extracted Skills</h2>
+                  <p className="text-xs text-blue-800/60 dark:text-blue-200/60 mt-0.5">Found in your resume</p>
                 </div>
               </div>
               
@@ -405,7 +404,7 @@ const StudentDashboard = () => {
                       transition={{ delay: 0.3 + (idx * 0.05), duration: 0.2 }}
                       whileHover={{ scale: 1.05, y: -2 }}
                       key={idx}
-                      className="px-4 py-2 bg-gradient-to-br from-slate-800 to-slate-900 text-blue-300 rounded-xl text-sm font-medium border border-blue-500/20 shadow-lg shadow-blue-500/5 hover:border-blue-400/50 hover:shadow-blue-500/20 hover:text-blue-200 transition-all cursor-default"
+                      className="px-4 py-2 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-900 text-blue-600 dark:text-blue-300 rounded-xl text-sm font-medium border border-blue-500/10 dark:border-blue-500/20 shadow-md dark:shadow-lg hover:border-blue-400/50 hover:text-blue-550 dark:hover:text-blue-200 transition-all cursor-default"
                     >
                       {skill}
                     </motion.span>
@@ -422,20 +421,19 @@ const StudentDashboard = () => {
             {/* Upload Resume */}
             <motion.div 
               variants={itemVariants}
-              className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hover:border-emerald-500/50 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 p-8 rounded-3xl relative overflow-hidden group"
+              className="bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl hover:border-emerald-500/50 hover:shadow-[0_0_30px_rgba(16,185,129,0.15)] transition-all duration-300 p-8 rounded-3xl relative overflow-hidden group"
             >
-              {/* Decorative background element */}
               <div className="absolute top-0 right-0 -mr-16 -mt-16 w-48 h-48 bg-gradient-to-br from-emerald-500/10 to-cyan-500/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700 pointer-events-none"></div>
 
               <div className="flex items-center mb-8 relative z-10 w-full">
                 <div className="flex items-center space-x-3">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/20 to-cyan-500/20 rounded-xl flex items-center justify-center border border-emerald-400/30 shadow-[0_0_15px_rgba(52,211,153,0.3)] relative overflow-hidden group-hover:scale-105 transition-all duration-300">
-                    <div className="absolute inset-0 bg-emerald-400/20 animate-pulse"></div>
-                    <svg className="w-6 h-6 text-emerald-300 relative z-10 group-hover:-translate-y-1 group-hover:scale-110 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-500/15 to-cyan-500/15 dark:from-emerald-500/20 dark:to-cyan-500/20 rounded-xl flex items-center justify-center border border-emerald-400/20 dark:border-emerald-400/30 shadow-[0_0_15px_rgba(52,211,153,0.15)] dark:shadow-[0_0_15px_rgba(52,211,153,0.3)] relative overflow-hidden group-hover:scale-105 transition-all duration-300">
+                    <div className="absolute inset-0 bg-emerald-400/10 dark:bg-emerald-400/20 animate-pulse"></div>
+                    <svg className="w-6 h-6 text-emerald-600 dark:text-emerald-300 relative z-10 group-hover:-translate-y-1 group-hover:scale-110 transition-all duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                     </svg>
                   </div>
-                  <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent">
                     Upload Resume
                   </h2>
                 </div>
@@ -445,7 +443,7 @@ const StudentDashboard = () => {
                   {hasUploadedResume && (
                     <button 
                       onClick={handleViewResume}
-                      className="px-3 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 hover:border-blue-500/40 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all shadow-sm shadow-blue-500/10 flex items-center gap-1.5 cursor-pointer"
+                      className="px-3 py-1 bg-blue-500/10 hover:bg-blue-500/20 text-blue-600 dark:text-blue-400 border border-blue-500/20 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all shadow-sm flex items-center gap-1.5 cursor-pointer"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
                       View
@@ -453,12 +451,12 @@ const StudentDashboard = () => {
                   )}
                   
                   {hasUploadedResume ? (
-                    <span className="px-3 py-1 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm shadow-emerald-500/10">
-                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span>
+                    <span className="px-3 py-1 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm shadow-emerald-500/5 dark:shadow-sm dark:shadow-emerald-500/10">
+                      <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span>
                       Parsed
                     </span>
                   ) : (
-                    <span className="px-3 py-1 bg-slate-500/10 text-slate-400 border border-slate-500/20 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                    <span className="px-3 py-1 bg-slate-500/10 text-slate-500 dark:text-slate-400 border border-slate-500/20 rounded-full text-[10px] font-bold uppercase tracking-wider flex items-center gap-1.5">
                       <span className="w-1.5 h-1.5 bg-slate-500 rounded-full"></span>
                       Not Parsed
                     </span>
@@ -471,9 +469,9 @@ const StudentDashboard = () => {
               </div>
 
               {!hasUploadedResume && (
-                <div className="mt-6 bg-cyan-900/20 backdrop-blur-sm p-4 rounded-xl border border-cyan-400/20 flex items-center space-x-3 relative z-10">
-                  <span className="text-cyan-400 text-lg">💡</span>
-                  <p className="text-cyan-200 text-sm">
+                <div className="mt-6 bg-cyan-100/50 dark:bg-cyan-900/20 backdrop-blur-sm p-4 rounded-xl border border-cyan-400/20 flex items-center space-x-3 relative z-10 animate-pulse">
+                  <span className="text-cyan-600 dark:text-cyan-400 text-lg">💡</span>
+                  <p className="text-cyan-800 dark:text-cyan-200 text-sm">
                     Upload your resume to see your skills and get job recommendations
                   </p>
                 </div>
@@ -487,10 +485,10 @@ const StudentDashboard = () => {
             className="lg:col-span-2"
           >
             {/* Recommended Jobs */}
-            <div className="bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300 p-8 rounded-3xl">
+            <div className="bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300 p-8 rounded-3xl">
               <div className="flex items-center space-x-3 mb-6">
                 <span className="text-3xl">💼</span>
-                <h2 id="recommended-jobs-title" className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                <h2 id="recommended-jobs-title" className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent">
                   Recommended Jobs
                 </h2>
               </div>
@@ -498,33 +496,33 @@ const StudentDashboard = () => {
               {!hasUploadedResume ? (
                 <div className="text-center py-12">
                   <div className="text-5xl mb-4">📄</div>
-                  <p className="text-gray-300">Upload your resume to get started</p>
-                  <p className="text-gray-400 text-sm mt-2">
+                  <p className="text-slate-700 dark:text-gray-300">Upload your resume to get started</p>
+                  <p className="text-slate-500 dark:text-gray-400 text-sm mt-2">
                     We'll analyze your skills and show personalized recommendations
                   </p>
                   <button
                     onClick={() => document.getElementById('resume-upload-input')?.click()}
-                    className="mt-4 px-4 py-2 bg-cyan-600 rounded-lg hover:bg-cyan-700 transition cursor-pointer"
+                    className="mt-4 px-6 py-2.5 bg-cyan-600 text-white rounded-xl hover:bg-cyan-700 transition cursor-pointer font-bold shadow-md"
                   >
                     Upload Resume Now
                   </button>
                 </div>
               ) : loading ? (
                 <div className="flex justify-center items-center py-12 space-x-3">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-400"></div>
-                  <p className="text-gray-300">Finding perfect matches for you...</p>
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+                  <p className="text-slate-700 dark:text-gray-300">Finding perfect matches for you...</p>
                 </div>
               ) : (jobs.length === 0 && allJobs.length === 0) ? (
                 <div className="text-center py-12">
                   <div className="text-5xl mb-4">📢</div>
-                  <p className="text-gray-300">No active jobs available in the system yet.</p>
-                  <p className="text-gray-400 text-sm mt-2">Check back later or try updating your resume.</p>
+                  <p className="text-slate-700 dark:text-gray-300">No active jobs available in the system yet.</p>
+                  <p className="text-slate-500 dark:text-gray-400 text-sm mt-2">Check back later or try updating your resume.</p>
                 </div>
               ) : jobs.length === 0 ? (
                 <div className="text-center py-12">
                   <div className="text-5xl mb-4">🔍</div>
-                  <p className="text-gray-300">No jobs matching your specific skills currently.</p>
-                  <p className="text-gray-400 text-sm mt-2">Try updating your resume with more skills or exploring all jobs.</p>
+                  <p className="text-slate-700 dark:text-gray-300">No jobs matching your specific skills currently.</p>
+                  <p className="text-slate-500 dark:text-gray-400 text-sm mt-2">Try updating your resume with more skills or exploring all jobs.</p>
                 </div>
               ) : (
                 <motion.div 
@@ -562,7 +560,7 @@ const StudentDashboard = () => {
       </motion.div>
 
       {showJobDetails && selectedJob && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-lg z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-lg z-50 flex items-center justify-center p-4">
           <div className="relative max-w-4xl w-full">
             <JobDetails
               jobId={selectedJob.id || selectedJob._id}
@@ -574,10 +572,10 @@ const StudentDashboard = () => {
 
       {/* Resume Viewer Modal */}
       {showResumeViewer && resumeUrl && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4 md:p-8">
-          <div className="bg-slate-900 rounded-3xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden border border-white/10 shadow-2xl animate-fade-in">
-            <div className="p-5 bg-slate-800/80 border-b border-white/10 flex justify-between items-center">
-              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent flex items-center gap-2">
+        <div className="fixed inset-0 bg-black/60 dark:bg-black/80 backdrop-blur-sm z-[100] flex items-center justify-center p-4 md:p-8">
+          <div className="bg-white dark:bg-slate-900 rounded-3xl w-full max-w-5xl h-[85vh] flex flex-col overflow-hidden border border-slate-200 dark:border-white/10 shadow-2xl animate-fade-in">
+            <div className="p-5 bg-slate-100 dark:bg-slate-800/80 border-b border-slate-200 dark:border-white/10 flex justify-between items-center">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent flex items-center gap-2">
                 <span className="text-2xl">📄</span> Document Viewer
               </h3>
               <div className="flex gap-4">
@@ -590,7 +588,7 @@ const StudentDashboard = () => {
                 </button>
                 <button 
                   onClick={() => setShowResumeViewer(false)}
-                  className="px-5 py-2.5 bg-slate-700 hover:bg-slate-600 text-white rounded-xl font-semibold transition-colors cursor-pointer"
+                  className="px-5 py-2.5 bg-slate-200 dark:bg-slate-700 hover:bg-slate-350 dark:hover:bg-slate-600 text-slate-800 dark:text-white rounded-xl font-semibold transition-colors cursor-pointer"
                 >
                   Close
                 </button>

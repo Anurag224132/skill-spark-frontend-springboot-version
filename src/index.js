@@ -6,6 +6,7 @@ import './index.css';
 import App from './App';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ErrorBoundary from './components/common/ErrorBoundary';
+import { ThemeProvider } from './context/ThemeContext';
 
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
@@ -40,7 +41,9 @@ root.render(
     <ErrorBoundary>
       <QueryClientProvider client={queryClient}>
         <Router>
-          <App />
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>
         </Router>
       </QueryClientProvider>
     </ErrorBoundary>

@@ -5,6 +5,7 @@ import LogoutButton from '../components/common/LogoutButton';
 import JobManagement from '../components/admin/JobManagement';
 import AnalyticsCard from '../components/admin/AnalyticsCard';
 import DashboardBackground from '../components/common/DashboardBackground';
+import ThemeToggle from '../components/common/ThemeToggle';
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -241,7 +242,7 @@ const AdminDashboard = () => {
     }
 
     return (
-        <div className="min-h-screen bg-[#050B14] text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8">
+        <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8 transition-colors duration-300">
             <DashboardBackground />
 
             {/* Modal for both User and Job Details */}
@@ -707,7 +708,7 @@ const AdminDashboard = () => {
                 {/* Header Section */}
                 <motion.div 
                     variants={itemVariants}
-                    className="flex flex-col lg:flex-row lg:items-center lg:justify-between bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-white/20 shadow-2xl hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
+                    className="flex flex-col lg:flex-row lg:items-center lg:justify-between bg-white/70 dark:bg-white/10 backdrop-blur-xl p-8 rounded-3xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl hover:border-cyan-500/50 hover:shadow-[0_0_30px_rgba(6,182,212,0.15)] transition-all duration-300"
                 >
                     <div className="flex items-center space-x-4 mb-4 lg:mb-0">
                         <div className="h-16 w-16 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-2xl flex items-center justify-center shadow-lg">
@@ -716,14 +717,15 @@ const AdminDashboard = () => {
                             </svg>
                         </div>
                         <div>
-                            <h1 className="text-4xl font-bold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                            <h1 className="text-4xl font-bold bg-gradient-to-r from-slate-900 to-slate-650 dark:from-white dark:to-gray-300 bg-clip-text text-transparent">
                                 Admin Dashboard
                             </h1>
-                            <p className="text-gray-300 text-lg">System Management & Analytics</p>
+                            <p className="text-slate-600 dark:text-gray-300 text-lg">System Management & Analytics</p>
                         </div>
                     </div>
                     <div className="flex items-center space-x-4">
-                        <div className="hidden lg:flex items-center space-x-2 text-gray-300">
+                        <ThemeToggle />
+                        <div className="hidden lg:flex items-center space-x-2 text-slate-600 dark:text-gray-300">
                             <div className="h-2 w-2 bg-emerald-400 rounded-full animate-pulse"></div>
                             <span className="text-sm">System Online</span>
                         </div>
@@ -738,10 +740,10 @@ const AdminDashboard = () => {
                 {/* Users Management Section */}
                 <motion.div 
                     variants={itemVariants}
-                    className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-3xl shadow-2xl hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-300"
+                    className="bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 p-8 rounded-3xl shadow-xl dark:shadow-2xl hover:border-purple-500/50 hover:shadow-[0_0_30px_rgba(168,85,247,0.15)] transition-all duration-300"
                 >
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-                        <h2 className="text-2xl font-bold text-white">Users Management</h2>
+                        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">Users Management</h2>
 
                         <div className="flex flex-col sm:flex-row gap-3">
                             {/* Search Bar */}
