@@ -64,7 +64,7 @@ const HomePage = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans overflow-hidden selection:bg-cyan-500/30 transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans overflow-hidden selection:bg-cyan-500/30 transition-colors duration-300">
             {/* --- Global Background Effects --- */}
             <div className="fixed inset-0 pointer-events-none z-0">
                 <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-emerald-600/5 dark:bg-emerald-600/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen animate-pulse-slow"></div>
@@ -105,7 +105,7 @@ const HomePage = () => {
                 </nav>
             </header>
 
-            <main className="relative z-10">
+            <main className="flex-grow relative z-10">
                 {/* --- Hero Section --- */}
                 <section className="pt-40 pb-20 md:pt-52 md:pb-32 px-4 text-center relative">
                     <div className="max-w-5xl mx-auto">

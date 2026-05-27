@@ -5,7 +5,7 @@ import ThemeToggle from '../components/common/ThemeToggle';
 
 const TermsOfService = () => {
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans selection:bg-cyan-500/30 transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans selection:bg-cyan-500/30 transition-colors duration-300">
             {/* Header / Nav */}
             <header className="sticky top-0 z-50 bg-slate-50/80 dark:bg-[#050B14]/80 backdrop-blur-xl border-b border-slate-200 dark:border-white/5 transition-all duration-300">
                 <nav className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
@@ -26,7 +26,7 @@ const TermsOfService = () => {
                 </nav>
             </header>
 
-            <main className="max-w-4xl mx-auto px-6 py-20 relative z-10">
+            <main className="flex-grow max-w-4xl mx-auto px-6 py-20 relative z-10 w-full">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}

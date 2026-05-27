@@ -30,7 +30,7 @@ const ContactUs = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans selection:bg-cyan-500/30 relative overflow-hidden transition-colors duration-300">
+        <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans selection:bg-cyan-500/30 relative overflow-hidden transition-colors duration-300">
             {/* Background effects */}
             <div className="absolute top-[-20%] left-[-10%] w-[50%] h-[50%] bg-cyan-600/5 dark:bg-cyan-600/10 rounded-full blur-[120px] mix-blend-multiply dark:mix-blend-screen pointer-events-none"></div>
             
@@ -54,7 +54,7 @@ const ContactUs = () => {
                 </nav>
             </header>
 
-            <main className="max-w-7xl mx-auto px-6 py-20 relative z-10 grid md:grid-cols-2 gap-16 items-start">
+            <main className="flex-grow max-w-7xl mx-auto px-6 py-20 relative z-10 grid md:grid-cols-2 gap-16 items-start w-full">
                 {/* Left Side - Info */}
                 <motion.div
                     initial={{ opacity: 0, x: -30 }}
