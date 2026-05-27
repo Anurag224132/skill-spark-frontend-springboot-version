@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import api from '../../utils/api';
+import { useTheme } from '../../context/ThemeContext';
 import {
   BarChart,
   Bar,
@@ -14,6 +15,8 @@ import {
 } from 'recharts';
 
 const AnalyticsCard = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [analyticsData, setAnalyticsData] = useState({
     metrics: {},
     userActivity: [],
@@ -147,7 +150,7 @@ const AnalyticsCard = () => {
   const COLORS = ['#10B981', '#3B82F6', '#6366F1'];
 
   return (
-    <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-6 rounded-3xl shadow-2xl">
+    <div className="bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 p-6 rounded-3xl shadow-xl dark:shadow-2xl transition-colors duration-300">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
         <div className="flex items-center space-x-3">
           <div className="h-12 w-12 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-xl flex items-center justify-center shadow-lg">
@@ -155,25 +158,25 @@ const AnalyticsCard = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-white">System Analytics</h2>
+          <h2 className="text-2xl font-bold text-slate-900 dark:text-white">System Analytics</h2>
         </div>
         
-        <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1 border border-white/20">
+        <div className="flex space-x-1 bg-slate-100 dark:bg-slate-800/50 rounded-lg p-1 border border-slate-200 dark:border-white/20">
           <button
             onClick={() => setTimeRange('week')}
-            className={`px-3 py-1 text-sm rounded-md transition-colors ${timeRange === 'week' ? 'bg-emerald-500 text-white' : 'text-gray-300 hover:bg-slate-700/50'}`}
+            className={`px-3 py-1 text-sm rounded-md transition-colors ${timeRange === 'week' ? 'bg-emerald-500 text-white' : 'text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-slate-700/50'}`}
           >
             Week
           </button>
           <button
             onClick={() => setTimeRange('month')}
-            className={`px-3 py-1 text-sm rounded-md transition-colors ${timeRange === 'month' ? 'bg-emerald-500 text-white' : 'text-gray-300 hover:bg-slate-700/50'}`}
+            className={`px-3 py-1 text-sm rounded-md transition-colors ${timeRange === 'month' ? 'bg-emerald-500 text-white' : 'text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-slate-700/50'}`}
           >
             Month
           </button>
           <button
             onClick={() => setTimeRange('year')}
-            className={`px-3 py-1 text-sm rounded-md transition-colors ${timeRange === 'year' ? 'bg-emerald-500 text-white' : 'text-gray-300 hover:bg-slate-700/50'}`}
+            className={`px-3 py-1 text-sm rounded-md transition-colors ${timeRange === 'year' ? 'bg-emerald-500 text-white' : 'text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-slate-700/50'}`}
           >
             Year
           </button>
@@ -199,7 +202,7 @@ const AnalyticsCard = () => {
           {/* Quick Stats */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {Object.entries(analyticsData.metrics).map(([key, value]) => (
-              <div key={key} className="group bg-gradient-to-br from-slate-800/50 to-slate-700/50 p-6 rounded-2xl border border-white/20 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
+              <div key={key} className="group bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 p-6 rounded-2xl border border-slate-200 dark:border-white/20 shadow-md hover:shadow-lg dark:shadow-lg hover:scale-[1.02] transition-all duration-300">
                 <div className="flex items-center justify-between mb-4">
                   <div className={`h-12 w-12 bg-gradient-to-br ${metricConfig[key]?.gradient || 'from-gray-500 to-gray-600'} rounded-xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300`}>
                     <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -209,11 +212,11 @@ const AnalyticsCard = () => {
                     </svg>
                   </div>
                   <div className="text-right">
-                    <p className="text-3xl font-bold text-white">{value}</p>
+                    <p className="text-3xl font-bold text-slate-900 dark:text-white">{value}</p>
                     <div className="h-1 w-16 bg-gradient-to-r from-transparent to-emerald-400 rounded-full ml-auto mt-1"></div>
                   </div>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-300">
+                <h3 className="text-lg font-semibold text-slate-600 dark:text-gray-300">
                   {metricConfig[key]?.label || key.replace(/([A-Z])/g, ' $1')}
                 </h3>
               </div>
@@ -222,9 +225,9 @@ const AnalyticsCard = () => {
 
           {/* Charts */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="bg-gradient-to-br from-slate-800/50 to-slate-700/50 p-6 rounded-2xl border border-white/20 shadow-lg">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                <svg className="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 p-6 rounded-2xl border border-slate-200 dark:border-white/20 shadow-md dark:shadow-lg">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center">
+                <svg className="w-5 h-5 mr-2 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
                 User Activity ({timeRange})
@@ -232,25 +235,25 @@ const AnalyticsCard = () => {
               <div className="h-64">
                 <ResponsiveContainer width="100%" height="100%">
                   <BarChart data={analyticsData.userActivity}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                    <CartesianGrid strokeDasharray="3 3" stroke={isDark ? "#374151" : "#E2E8F0"} />
                     <XAxis 
                       dataKey="name" 
-                      stroke="#9CA3AF"
-                      tick={{ fill: '#D1D5DB' }}
+                      stroke={isDark ? "#9CA3AF" : "#64748B"}
+                      tick={{ fill: isDark ? '#D1D5DB' : '#475569' }}
                     />
                     <YAxis 
-                      stroke="#9CA3AF"
-                      tick={{ fill: '#D1D5DB' }}
+                      stroke={isDark ? "#9CA3AF" : "#64748B"}
+                      tick={{ fill: isDark ? '#D1D5DB' : '#475569' }}
                     />
                     <Tooltip 
                       contentStyle={{ 
-                        backgroundColor: '#1E293B', 
-                        borderColor: '#374151',
+                        backgroundColor: isDark ? '#1E293B' : '#FFFFFF', 
+                        borderColor: isDark ? '#374151' : '#E2E8F0',
                         borderRadius: '0.5rem',
                         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                       }}
-                      itemStyle={{ color: '#E5E7EB' }}
-                      cursor={{ fill: '#374151' }}
+                      itemStyle={{ color: isDark ? '#E5E7EB' : '#0F172A' }}
+                      cursor={{ fill: isDark ? '#374151' : '#F1F5F9' }}
                     />
                     <Bar 
                       dataKey="active" 
@@ -263,9 +266,9 @@ const AnalyticsCard = () => {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-slate-800/50 to-slate-700/50 p-6 rounded-2xl border border-white/20 shadow-lg">
-              <h3 className="text-lg font-semibold text-white mb-4 flex items-center">
-                <svg className="w-5 h-5 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800/50 dark:to-slate-700/50 p-6 rounded-2xl border border-slate-200 dark:border-white/20 shadow-md dark:shadow-lg">
+              <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-4 flex items-center">
+                <svg className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                 </svg>
                 User Role Distribution
@@ -281,7 +284,24 @@ const AnalyticsCard = () => {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
-                      label={({ name, percent }) => `${name}: ${(Number(percent) * 100).toFixed(0)}%`}
+                      label={({ name, percent, cx, cy, midAngle, innerRadius, outerRadius }) => {
+                        const RADIAN = Math.PI / 180;
+                        const radius = outerRadius + 22;
+                        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                        return (
+                          <text
+                            x={x}
+                            y={y}
+                            fill={isDark ? '#D1D5DB' : '#1E293B'}
+                            textAnchor={x > cx ? 'start' : 'end'}
+                            dominantBaseline="central"
+                            className="text-xs font-semibold"
+                          >
+                            {`${name}: ${(percent * 100).toFixed(0)}%`}
+                          </text>
+                        );
+                      }}
                       animationDuration={1500}
                     >
                       {analyticsData.roleDistribution.map((entry, index) => (
@@ -290,12 +310,12 @@ const AnalyticsCard = () => {
                     </Pie>
                     <Tooltip 
                       contentStyle={{ 
-                        backgroundColor: '#1E293B', 
-                        borderColor: '#374151',
+                        backgroundColor: isDark ? '#1E293B' : '#FFFFFF', 
+                        borderColor: isDark ? '#374151' : '#E2E8F0',
                         borderRadius: '0.5rem',
                         boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                       }}
-                      itemStyle={{ color: '#E5E7EB' }}
+                      itemStyle={{ color: isDark ? '#E5E7EB' : '#0F172A' }}
                       formatter={(value, name, props) => [value, name]}
                     />
                   </PieChart>

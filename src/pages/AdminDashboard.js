@@ -258,12 +258,12 @@ const AdminDashboard = () => {
                         initial={{ scale: 0.95, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.95, opacity: 0 }}
-                        className="bg-slate-900/90 backdrop-blur-xl rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-white/20 shadow-[0_0_50px_rgba(6,182,212,0.15)] relative"
+                        className="bg-white dark:bg-slate-900/90 backdrop-blur-xl rounded-2xl p-6 max-w-4xl w-full max-h-[90vh] overflow-y-auto border border-slate-200 dark:border-white/20 shadow-2xl relative text-slate-900 dark:text-white"
                     >
                         {/* Close Button */}
                         <button
                             onClick={handleCloseModal}
-                            className="absolute top-4 right-4 text-gray-400 hover:text-white bg-slate-700/50 p-1 rounded-full hover:bg-slate-600 transition-colors"
+                            className="absolute top-4 right-4 text-slate-400 hover:text-slate-600 dark:text-gray-400 dark:hover:text-white bg-slate-100 dark:bg-slate-700/50 p-1.5 rounded-full hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors"
                         >
                             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -279,14 +279,14 @@ const AdminDashboard = () => {
                         ) : selectedUser ? (
                             <>
                                 {/* User Header */}
-                                <div className="border-b border-white/10 pb-6 mb-6">
+                                <div className="border-b border-slate-200 dark:border-white/10 pb-6 mb-6">
                                     <div className="flex items-center space-x-4">
                                         <div className="h-20 w-20 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg">
                                             {selectedUser.name?.charAt(0)?.toUpperCase() || 'U'}
                                         </div>
                                         <div>
-                                            <h2 className="text-2xl font-bold text-white">{selectedUser.name || 'No Name'}</h2>
-                                            <p className="text-gray-400">{selectedUser.email || 'No Email'}</p>
+                                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{selectedUser.name || 'No Name'}</h2>
+                                            <p className="text-slate-500 dark:text-gray-400">{selectedUser.email || 'No Email'}</p>
                                             <div className="flex items-center mt-2 space-x-2">
                                                 <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${selectedUser.role === 'admin' ? 'bg-red-500/20 text-red-300' :
                                                     selectedUser.role === 'recruiter' ? 'bg-blue-500/20 text-blue-300' :
@@ -309,8 +309,8 @@ const AdminDashboard = () => {
                                 <div className="space-y-6">
                                     {/* Common Analytics for all roles */}
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                        <div className="bg-slate-700/50 p-4 rounded-xl border border-white/10">
-                                            <h3 className="font-medium text-cyan-400 mb-3 flex items-center">
+                                        <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+                                            <h3 className="font-medium text-cyan-600 dark:text-cyan-400 mb-3 flex items-center">
                                                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
@@ -318,18 +318,18 @@ const AdminDashboard = () => {
                                             </h3>
                                             <div className="space-y-3">
                                                 <div>
-                                                    <p className="text-xs text-gray-400">Last Active</p>
-                                                    <p className="text-sm text-white">{userAnalytics?.lastActive || 'N/A'}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-gray-400">Last Active</p>
+                                                    <p className="text-sm text-slate-900 dark:text-white font-medium">{userAnalytics?.lastActive || 'N/A'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-xs text-gray-400">Account Created</p>
-                                                    <p className="text-sm text-white">{userAnalytics?.createdAt || 'N/A'}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-gray-400">Account Created</p>
+                                                    <p className="text-sm text-slate-900 dark:text-white font-medium">{userAnalytics?.createdAt || 'N/A'}</p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="bg-slate-700/50 p-4 rounded-xl border border-white/10">
-                                            <h3 className="font-medium text-purple-400 mb-3 flex items-center">
+                                        <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+                                            <h3 className="font-medium text-purple-600 dark:text-purple-400 mb-3 flex items-center">
                                                 <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                                 </svg>
@@ -338,12 +338,12 @@ const AdminDashboard = () => {
                                             <div className="flex flex-wrap gap-2">
                                                 {userAnalytics?.skills?.length > 0 ? (
                                                     userAnalytics.skills.map((skill, index) => (
-                                                        <span key={index} className="bg-purple-500/20 text-purple-300 px-2 py-1 rounded text-xs">
+                                                        <span key={index} className="bg-purple-500/20 text-purple-600 dark:text-purple-300 px-2 py-1 rounded text-xs font-medium border border-purple-500/30">
                                                             {skill}
                                                         </span>
                                                     ))
                                                 ) : (
-                                                    <span className="text-gray-400 text-sm">No skills listed</span>
+                                                    <span className="text-slate-500 dark:text-gray-400 text-sm">No skills listed</span>
                                                 )}
                                             </div>
                                         </div>
@@ -352,47 +352,47 @@ const AdminDashboard = () => {
                                     {/* Role-Specific Analytics */}
                                     {selectedUser.role === 'student' && (
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-white/10">
-                                                <h3 className="font-medium text-emerald-400 mb-3 flex items-center">
+                                            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+                                                <h3 className="font-medium text-emerald-600 dark:text-emerald-400 mb-3 flex items-center">
                                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                                                     </svg>
                                                     Courses
                                                 </h3>
                                                 <div className="flex items-end space-x-2">
-                                                    <p className="text-3xl font-bold text-white">{userAnalytics?.coursesEnrolled ?? 0}</p>
-                                                    <p className="text-xs text-gray-400 mb-1">Courses enrolled</p>
+                                                    <p className="text-3xl font-bold text-slate-900 dark:text-white">{userAnalytics?.coursesEnrolled ?? 0}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-gray-400 mb-1">Courses enrolled</p>
                                                 </div>
                                             </div>
 
-                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-white/10">
-                                                <h3 className="font-medium text-blue-400 mb-3 flex items-center">
+                                            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+                                                <h3 className="font-medium text-blue-600 dark:text-blue-400 mb-3 flex items-center">
                                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
                                                     </svg>
                                                     Job Applications
                                                 </h3>
                                                 <div className="grid grid-cols-3 gap-2">
-                                                    <div className="bg-slate-600/30 p-2 rounded">
-                                                        <p className="text-xs text-gray-400">Applied</p>
-                                                        <p className="text-xl font-bold text-white">{userAnalytics?.jobsApplied ?? 0}</p>
+                                                    <div className="bg-slate-100 dark:bg-slate-600/30 p-2 rounded">
+                                                        <p className="text-xs text-slate-500 dark:text-gray-400">Applied</p>
+                                                        <p className="text-xl font-bold text-slate-900 dark:text-white">{userAnalytics?.jobsApplied ?? 0}</p>
                                                     </div>
-                                                    <div className="bg-slate-600/30 p-2 rounded">
-                                                        <p className="text-xs text-gray-400">Interviews</p>
-                                                        <p className="text-xl font-bold text-white">{userAnalytics?.jobsInterviewed ?? 0}</p>
+                                                    <div className="bg-slate-100 dark:bg-slate-600/30 p-2 rounded">
+                                                        <p className="text-xs text-slate-500 dark:text-gray-400">Interviews</p>
+                                                        <p className="text-xl font-bold text-slate-900 dark:text-white">{userAnalytics?.jobsInterviewed ?? 0}</p>
                                                     </div>
-                                                    <div className="bg-slate-600/30 p-2 rounded">
-                                                        <p className="text-xs text-gray-400">Rejected</p>
-                                                        <p className="text-xl font-bold text-white">{userAnalytics?.jobsRejected ?? 0}</p>
+                                                    <div className="bg-slate-100 dark:bg-slate-600/30 p-2 rounded">
+                                                        <p className="text-xs text-slate-500 dark:text-gray-400">Rejected</p>
+                                                        <p className="text-xl font-bold text-slate-900 dark:text-white">{userAnalytics?.jobsRejected ?? 0}</p>
                                                     </div>
                                                 </div>
                                                 {userAnalytics?.jobsApplied > 0 && (
                                                     <div className="mt-3">
                                                         <div className="flex items-center justify-between text-xs mb-1">
-                                                            <span className="text-gray-400">Rejection Rate</span>
-                                                            <span className="text-white">{userAnalytics.rejectionRate}%</span>
+                                                            <span className="text-slate-500 dark:text-gray-400">Rejection Rate</span>
+                                                            <span className="text-slate-900 dark:text-white font-medium">{userAnalytics.rejectionRate}%</span>
                                                         </div>
-                                                        <div className="w-full bg-gray-700 rounded-full h-2">
+                                                        <div className="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2">
                                                             <div
                                                                 className="bg-red-500 h-2 rounded-full"
                                                                 style={{ width: `${userAnalytics.rejectionRate}%` }}
@@ -406,47 +406,47 @@ const AdminDashboard = () => {
 
                                     {selectedUser.role === 'recruiter' && (
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-white/10">
-                                                <h3 className="font-medium text-blue-400 mb-3 flex items-center">
+                                            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+                                                <h3 className="font-medium text-blue-600 dark:text-blue-400 mb-3 flex items-center">
                                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6a2 2 0 01-2 2H8a2 2 0 01-2-2V8a2 2 0 012-2V6" />
                                                     </svg>
                                                     Jobs Posted
                                                 </h3>
                                                 <div className="flex items-end space-x-2">
-                                                    <p className="text-3xl font-bold text-white">{userAnalytics?.jobsPosted ?? 0}</p>
-                                                    <p className="text-xs text-gray-400 mb-1">Total jobs posted</p>
+                                                    <p className="text-3xl font-bold text-slate-900 dark:text-white">{userAnalytics?.jobsPosted ?? 0}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-gray-400 mb-1">Total jobs posted</p>
                                                 </div>
                                             </div>
 
-                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-white/10">
-                                                <h3 className="font-medium text-emerald-400 mb-3 flex items-center">
+                                            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+                                                <h3 className="font-medium text-emerald-600 dark:text-emerald-400 mb-3 flex items-center">
                                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                                     </svg>
                                                     Applications
                                                 </h3>
                                                 <div className="grid grid-cols-3 gap-2">
-                                                    <div className="bg-slate-600/30 p-2 rounded">
-                                                        <p className="text-xs text-gray-400">Total</p>
-                                                        <p className="text-xl font-bold text-white">{userAnalytics?.totalApplications ?? 0}</p>
+                                                    <div className="bg-slate-100 dark:bg-slate-600/30 p-2 rounded">
+                                                        <p className="text-xs text-slate-500 dark:text-gray-400">Total</p>
+                                                        <p className="text-xl font-bold text-slate-900 dark:text-white">{userAnalytics?.totalApplications ?? 0}</p>
                                                     </div>
-                                                    <div className="bg-slate-600/30 p-2 rounded">
-                                                        <p className="text-xs text-gray-400">Interviews</p>
-                                                        <p className="text-xl font-bold text-white">{userAnalytics?.interviewsScheduled ?? 0}</p>
+                                                    <div className="bg-slate-100 dark:bg-slate-600/30 p-2 rounded">
+                                                        <p className="text-xs text-slate-500 dark:text-gray-400">Interviews</p>
+                                                        <p className="text-xl font-bold text-slate-900 dark:text-white">{userAnalytics?.interviewsScheduled ?? 0}</p>
                                                     </div>
-                                                    <div className="bg-slate-600/30 p-2 rounded">
-                                                        <p className="text-xs text-gray-400">Rejected</p>
-                                                        <p className="text-xl font-bold text-white">{userAnalytics?.rejected ?? 0}</p>
+                                                    <div className="bg-slate-100 dark:bg-slate-600/30 p-2 rounded">
+                                                        <p className="text-xs text-slate-500 dark:text-gray-400">Rejected</p>
+                                                        <p className="text-xl font-bold text-slate-900 dark:text-white">{userAnalytics?.rejected ?? 0}</p>
                                                     </div>
                                                 </div>
                                                 {userAnalytics?.totalApplications > 0 && (
                                                     <div className="mt-3">
                                                         <div className="flex items-center justify-between text-xs mb-1">
-                                                            <span className="text-gray-400">Rejection Rate</span>
-                                                            <span className="text-white">{userAnalytics.recruiterRejectionRate}%</span>
+                                                            <span className="text-slate-500 dark:text-gray-400">Rejection Rate</span>
+                                                            <span className="text-slate-900 dark:text-white font-medium">{userAnalytics.recruiterRejectionRate}%</span>
                                                         </div>
-                                                        <div className="w-full bg-gray-700 rounded-full h-2">
+                                                        <div className="w-full bg-slate-200 dark:bg-gray-700 rounded-full h-2">
                                                             <div
                                                                 className="bg-red-500 h-2 rounded-full"
                                                                 style={{ width: `${userAnalytics.recruiterRejectionRate}%` }}
@@ -460,8 +460,8 @@ const AdminDashboard = () => {
 
                                     {selectedUser.role === 'admin' && (
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-white/10">
-                                                <h3 className="font-medium text-purple-400 mb-3 flex items-center">
+                                            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+                                                <h3 className="font-medium text-purple-600 dark:text-purple-400 mb-3 flex items-center">
                                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -469,29 +469,29 @@ const AdminDashboard = () => {
                                                     Admin Actions
                                                 </h3>
                                                 <div className="flex items-end space-x-2">
-                                                    <p className="text-3xl font-bold text-white">{userAnalytics?.actionsTaken ?? 0}</p>
-                                                    <p className="text-xs text-gray-400 mb-1">Total actions taken</p>
+                                                    <p className="text-3xl font-bold text-slate-900 dark:text-white">{userAnalytics?.actionsTaken ?? 0}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-gray-400 mb-1">Total actions taken</p>
                                                 </div>
                                             </div>
 
-                                            <div className="bg-slate-700/50 p-4 rounded-xl border border-white/10">
-                                                <h3 className="font-medium text-blue-400 mb-3 flex items-center">
+                                            <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+                                                <h3 className="font-medium text-blue-600 dark:text-blue-400 mb-3 flex items-center">
                                                     <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                                                     </svg>
                                                     Users Managed
                                                 </h3>
                                                 <div className="flex items-end space-x-2">
-                                                    <p className="text-3xl font-bold text-white">{userAnalytics?.usersManaged ?? 0}</p>
-                                                    <p className="text-xs text-gray-400 mb-1">Users affected by actions</p>
+                                                    <p className="text-3xl font-bold text-slate-900 dark:text-white">{userAnalytics?.usersManaged ?? 0}</p>
+                                                    <p className="text-xs text-slate-500 dark:text-gray-400 mb-1">Users affected by actions</p>
                                                 </div>
                                             </div>
                                         </div>
                                     )}
 
                                     {/* Role Change Section */}
-                                    <div className="bg-slate-700/50 p-4 rounded-xl border border-white/10">
-                                        <h3 className="font-medium text-amber-400 mb-3 flex items-center">
+                                    <div className="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-xl border border-slate-200 dark:border-white/10">
+                                        <h3 className="font-medium text-amber-600 dark:text-amber-400 mb-3 flex items-center">
                                             <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
                                             </svg>
@@ -501,13 +501,13 @@ const AdminDashboard = () => {
                                             <select
                                                 value={selectedUser.role}
                                                 onChange={(e) => handleChangeUserRole(selectedUser._id, e.target.value)}
-                                                className="bg-slate-800/50 border border-white/20 px-4 py-2 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200"
+                                                className="bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-white/20 px-4 py-2 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200"
                                             >
                                                 <option value="student">Student</option>
                                                 <option value="recruiter">Recruiter</option>
                                                 <option value="admin">Admin</option>
                                             </select>
-                                            <span className="text-xs text-gray-400">Changes take effect immediately</span>
+                                            <span className="text-xs text-slate-500 dark:text-gray-400">Changes take effect immediately</span>
                                         </div>
                                     </div>
                                 </div>
@@ -516,30 +516,30 @@ const AdminDashboard = () => {
                             // Job Details Content
                             <div className="space-y-6">
                                 {/* Header Section */}
-                                <div className="border-b border-white/10 pb-6">
+                                <div className="border-b border-slate-200 dark:border-white/10 pb-6">
                                     <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
                                         <div>
-                                            <h2 className="text-2xl font-bold text-white">{selectedJob.title || 'Untitled Job'}</h2>
+                                            <h2 className="text-2xl font-bold text-slate-900 dark:text-white">{selectedJob.title || 'Untitled Job'}</h2>
                                             <div className="flex flex-wrap items-center gap-2 mt-2">
-                                                <span className="bg-emerald-500/20 text-emerald-300 px-2 py-1 rounded-full text-xs">
+                                                <span className="bg-emerald-500/20 text-emerald-600 dark:text-emerald-300 px-2 py-1 rounded-full text-xs font-medium">
                                                     {selectedJob.type || 'Full-time'}
                                                 </span>
-                                                <span className="bg-blue-500/20 text-blue-300 px-2 py-1 rounded-full text-xs">
+                                                <span className="bg-blue-500/20 text-blue-600 dark:text-blue-300 px-2 py-1 rounded-full text-xs font-medium">
                                                     {selectedJob.experience || 'Mid-level'}
                                                 </span>
                                                 {selectedJob.remote && (
-                                                    <span className="bg-purple-500/20 text-purple-300 px-2 py-1 rounded-full text-xs">
+                                                    <span className="bg-purple-500/20 text-purple-600 dark:text-purple-300 px-2 py-1 rounded-full text-xs font-medium">
                                                         Remote
                                                     </span>
                                                 )}
-                                                <span className="bg-amber-500/20 text-amber-300 px-2 py-1 rounded-full text-xs">
+                                                <span className="bg-amber-500/20 text-amber-600 dark:text-amber-300 px-2 py-1 rounded-full text-xs font-medium">
                                                     {selectedJob.isActive ? 'Active' : 'Inactive'}
                                                 </span>
                                             </div>
                                         </div>
                                         <button
                                             onClick={() => handleDeleteJob(selectedJob._id)}
-                                            className="text-xs bg-red-500/20 hover:bg-red-500/30 text-red-300 px-3 py-2 rounded-lg transition-colors"
+                                            className="text-xs bg-red-500/20 hover:bg-red-500/30 text-red-600 dark:text-red-300 px-3 py-2 rounded-lg transition-colors font-medium border border-red-500/30"
                                         >
                                             Delete Job
                                         </button>
@@ -551,23 +551,23 @@ const AdminDashboard = () => {
                                     {/* Left Column */}
                                     <div className="md:col-span-2 space-y-6">
                                         {/* Description */}
-                                        <div className="bg-slate-700/50 p-5 rounded-xl border border-white/10">
-                                            <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
-                                                <svg className="w-5 h-5 mr-2 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="bg-slate-50 dark:bg-slate-700/50 p-5 rounded-xl border border-slate-200 dark:border-white/10">
+                                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3 flex items-center">
+                                                <svg className="w-5 h-5 mr-2 text-emerald-500 dark:text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                                 </svg>
                                                 Job Description
                                             </h3>
-                                            <p className="text-gray-300 whitespace-pre-line">
+                                            <p className="text-slate-600 dark:text-gray-300 whitespace-pre-line">
                                                 {selectedJob.description || 'No description provided'}
                                             </p>
                                         </div>
 
                                         {/* Skills */}
                                         {selectedJob.requiredSkills?.length > 0 && (
-                                            <div className="bg-slate-700/50 p-5 rounded-xl border border-white/10">
-                                                <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
-                                                    <svg className="w-5 h-5 mr-2 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div className="bg-slate-50 dark:bg-slate-700/50 p-5 rounded-xl border border-slate-200 dark:border-white/10">
+                                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3 flex items-center">
+                                                    <svg className="w-5 h-5 mr-2 text-blue-500 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.031 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
                                                     </svg>
                                                     Required Skills
@@ -576,7 +576,7 @@ const AdminDashboard = () => {
                                                     {selectedJob.requiredSkills.map((skill, index) => (
                                                         <span
                                                             key={index}
-                                                            className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-full text-sm"
+                                                            className="bg-blue-500/20 text-blue-600 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium border border-blue-500/20"
                                                         >
                                                             {skill}
                                                         </span>
@@ -589,57 +589,57 @@ const AdminDashboard = () => {
                                     {/* Right Column */}
                                     <div className="space-y-6">
                                         {/* Company & Recruiter Info */}
-                                        <div className="bg-slate-700/50 p-5 rounded-xl border border-white/10">
-                                            <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
-                                                <svg className="w-5 h-5 mr-2 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="bg-slate-50 dark:bg-slate-700/50 p-5 rounded-xl border border-slate-200 dark:border-white/10">
+                                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3 flex items-center">
+                                                <svg className="w-5 h-5 mr-2 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                                                 </svg>
                                                 Company Details
                                             </h3>
                                             <div className="space-y-3">
                                                 <div>
-                                                    <p className="text-sm text-gray-400">Company</p>
-                                                    <p className="text-white font-medium">{selectedJob.companyName || 'Not specified'}</p>
+                                                    <p className="text-sm text-slate-500 dark:text-gray-400">Company</p>
+                                                    <p className="text-slate-900 dark:text-white font-medium">{selectedJob.companyName || 'Not specified'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm text-gray-400">Recruiter</p>
-                                                    <p className="text-white font-medium">{selectedJob.recruiterName || 'Not specified'}</p>
+                                                    <p className="text-sm text-slate-500 dark:text-gray-400">Recruiter</p>
+                                                    <p className="text-slate-900 dark:text-white font-medium">{selectedJob.recruiterName || 'Not specified'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm text-gray-400">Location</p>
-                                                    <p className="text-white font-medium">{selectedJob.location || 'Not specified'}</p>
+                                                    <p className="text-sm text-slate-500 dark:text-gray-400">Location</p>
+                                                    <p className="text-slate-900 dark:text-white font-medium">{selectedJob.location || 'Not specified'}</p>
                                                 </div>
                                             </div>
                                         </div>
 
                                         {/* Job Stats */}
-                                        <div className="bg-slate-700/50 p-5 rounded-xl border border-white/10">
-                                            <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
-                                                <svg className="w-5 h-5 mr-2 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div className="bg-slate-50 dark:bg-slate-700/50 p-5 rounded-xl border border-slate-200 dark:border-white/10">
+                                            <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3 flex items-center">
+                                                <svg className="w-5 h-5 mr-2 text-amber-500 dark:text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                                                 </svg>
                                                 Job Statistics
                                             </h3>
                                             <div className="grid grid-cols-2 gap-3">
                                                 <div>
-                                                    <p className="text-sm text-gray-400">Salary</p>
-                                                    <p className="text-white font-medium">
+                                                    <p className="text-sm text-slate-500 dark:text-gray-400">Salary</p>
+                                                    <p className="text-slate-900 dark:text-white font-medium">
                                                         {selectedJob.salary ? `$${selectedJob.salary}` : 'Not disclosed'}
                                                     </p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm text-gray-400">Type</p>
-                                                    <p className="text-white font-medium capitalize">{selectedJob.type || '-'}</p>
+                                                    <p className="text-sm text-slate-500 dark:text-gray-400">Type</p>
+                                                    <p className="text-slate-900 dark:text-white font-medium capitalize">{selectedJob.type || '-'}</p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm text-gray-400">Posted</p>
-                                                    <p className="text-white font-medium">
+                                                    <p className="text-sm text-slate-500 dark:text-gray-400">Posted</p>
+                                                    <p className="text-slate-900 dark:text-white font-medium">
                                                         {new Date(selectedJob.postedDate || selectedJob.createdAt).toLocaleDateString()}
                                                     </p>
                                                 </div>
                                                 <div>
-                                                    <p className="text-sm text-gray-400">Last Updated</p>
-                                                    <p className="text-white font-medium">
+                                                    <p className="text-sm text-slate-500 dark:text-gray-400">Last Updated</p>
+                                                    <p className="text-slate-900 dark:text-white font-medium">
                                                         {new Date(selectedJob.updatedAt).toLocaleDateString()}
                                                     </p>
                                                 </div>
@@ -648,38 +648,38 @@ const AdminDashboard = () => {
 
                                         {/* Applications Analytics */}
                                         {jobDetails && (
-                                            <div className="bg-slate-700/50 p-5 rounded-xl border border-white/10">
-                                                <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
-                                                    <svg className="w-5 h-5 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div className="bg-slate-50 dark:bg-slate-700/50 p-5 rounded-xl border border-slate-200 dark:border-white/10">
+                                                <h3 className="text-lg font-semibold text-slate-900 dark:text-white mb-3 flex items-center">
+                                                    <svg className="w-5 h-5 mr-2 text-cyan-500 dark:text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                                                     </svg>
                                                     Applications Analytics
                                                 </h3>
                                                 <div className="grid grid-cols-2 gap-3">
-                                                    <div className="bg-slate-600/30 p-2 rounded">
-                                                        <p className="text-xs text-gray-400">Total Applications</p>
-                                                        <p className="text-xl font-bold text-white">{jobDetails.applications || 0}</p>
+                                                    <div className="bg-slate-100 dark:bg-slate-600/30 p-2 rounded">
+                                                        <p className="text-xs text-slate-500 dark:text-gray-400">Total Applications</p>
+                                                        <p className="text-xl font-bold text-slate-900 dark:text-white">{jobDetails.applications || 0}</p>
                                                     </div>
-                                                    <div className="bg-slate-600/30 p-2 rounded">
-                                                        <p className="text-xs text-gray-400">Match Rate</p>
-                                                        <p className="text-xl font-bold text-white">
+                                                    <div className="bg-slate-100 dark:bg-slate-600/30 p-2 rounded">
+                                                        <p className="text-xs text-slate-500 dark:text-gray-400">Match Rate</p>
+                                                        <p className="text-xl font-bold text-slate-900 dark:text-white font-semibold">
                                                             {jobDetails.averageMatchScore ? `${jobDetails.averageMatchScore}%` : 'N/A'}
                                                         </p>
                                                     </div>
                                                 </div>
                                                 {jobDetails.topApplicants?.length > 0 && (
                                                     <div className="mt-3">
-                                                        <p className="text-sm text-gray-400 mb-1">Top Applicants:</p>
+                                                        <p className="text-sm text-slate-500 dark:text-gray-400 mb-1">Top Applicants:</p>
                                                         <div className="space-y-2">
                                                             {jobDetails.topApplicants.slice(0, 3).map((applicant, index) => (
-                                                                <div key={index} className="flex items-center justify-between bg-slate-600/20 p-2 rounded">
+                                                                <div key={index} className="flex items-center justify-between bg-slate-100 dark:bg-slate-600/20 p-2 rounded">
                                                                     <div className="flex items-center">
                                                                         <div className="h-6 w-6 bg-cyan-500/20 rounded-full flex items-center justify-center mr-2">
-                                                                            <span className="text-xs text-cyan-300">{index + 1}</span>
+                                                                            <span className="text-xs text-cyan-600 dark:text-cyan-300 font-bold">{index + 1}</span>
                                                                         </div>
-                                                                        <span className="text-sm text-white">{applicant.name || 'Anonymous'}</span>
+                                                                        <span className="text-sm text-slate-900 dark:text-white font-medium">{applicant.name || 'Anonymous'}</span>
                                                                     </div>
-                                                                    <span className="text-xs bg-green-500/20 text-green-300 px-2 py-1 rounded">
+                                                                    <span className="text-xs bg-green-500/20 text-green-600 dark:text-green-300 px-2 py-1 rounded font-medium">
                                                                         {applicant.matchScore}%
                                                                     </span>
                                                                 </div>
@@ -751,12 +751,12 @@ const AdminDashboard = () => {
                                 <input
                                     type="text"
                                     placeholder="Search users..."
-                                    className="bg-slate-800/50 border border-white/20 px-4 py-2 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 w-full sm:w-64"
+                                    className="bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-white/20 px-4 py-2 rounded-lg text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 w-full sm:w-64"
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
                                 />
                                 <svg
-                                    className="absolute right-3 top-2.5 h-5 w-5 text-gray-400"
+                                    className="absolute right-3 top-2.5 h-5 w-5 text-slate-400 dark:text-gray-400"
                                     fill="none"
                                     stroke="currentColor"
                                     viewBox="0 0 24 24"
@@ -766,12 +766,12 @@ const AdminDashboard = () => {
                             </div>
 
                             {/* Filter Buttons */}
-                            <div className="flex space-x-1 bg-slate-800/50 rounded-lg p-1 border border-white/20">
+                            <div className="flex space-x-1 bg-slate-100 dark:bg-slate-800/50 rounded-lg p-1 border border-slate-200 dark:border-white/20">
                                 <button
                                     onClick={() => setActiveUserTab('all')}
                                     className={`px-3 py-1 text-sm rounded-md transition-colors ${activeUserTab === 'all'
                                         ? 'bg-emerald-500 text-white'
-                                        : 'text-gray-300 hover:bg-slate-700/50'
+                                        : 'text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-slate-700/50'
                                         }`}
                                 >
                                     All
@@ -780,7 +780,7 @@ const AdminDashboard = () => {
                                     onClick={() => setActiveUserTab('student')}
                                     className={`px-3 py-1 text-sm rounded-md transition-colors ${activeUserTab === 'student'
                                         ? 'bg-emerald-500 text-white'
-                                        : 'text-gray-300 hover:bg-slate-700/50'
+                                        : 'text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-slate-700/50'
                                         }`}
                                 >
                                     Students
@@ -789,7 +789,7 @@ const AdminDashboard = () => {
                                     onClick={() => setActiveUserTab('recruiter')}
                                     className={`px-3 py-1 text-sm rounded-md transition-colors ${activeUserTab === 'recruiter'
                                         ? 'bg-emerald-500 text-white'
-                                        : 'text-gray-300 hover:bg-slate-700/50'
+                                        : 'text-slate-600 dark:text-gray-300 hover:bg-slate-200 dark:hover:bg-slate-700/50'
                                         }`}
                                 >
                                     Recruiters
@@ -807,33 +807,33 @@ const AdminDashboard = () => {
                         </div>
                     </div>
 
-                    <div className="overflow-x-auto rounded-2xl border border-white/10">
-                        <table className="min-w-full text-left text-sm">
+                    <div className="overflow-x-auto rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm">
+                        <table className="min-w-full text-left text-sm divide-y divide-slate-200 dark:divide-white/10">
                             <thead>
-                                <tr className="bg-gradient-to-r from-slate-800/50 to-slate-700/50 text-gray-100">
+                                <tr className="bg-slate-50 dark:bg-slate-800/50 text-slate-700 dark:text-gray-200 border-b border-slate-200 dark:border-white/10">
                                     <th className="p-4 font-semibold">Name</th>
                                     <th className="p-4 font-semibold">Email</th>
                                     <th className="p-4 font-semibold">Role</th>
                                     <th className="p-4 font-semibold">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-white/10">
+                            <tbody className="bg-white/50 dark:bg-white/5 divide-y divide-slate-200 dark:divide-white/10">
                                 {filteredUsers.length > 0 ? (
                                     (Array.isArray(filteredUsers) ? filteredUsers : []).map((user) => (
-                                        <tr key={user.id || user._id} className="hover:bg-white/5 transition-colors duration-200 group">
+                                        <tr key={user.id || user._id} className="hover:bg-slate-100 dark:hover:bg-white/10 transition-colors duration-200 group">
                                             <td className="p-4">
                                                 <div className="flex items-center space-x-3">
-                                                    <div className="h-8 w-8 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-full flex items-center justify-center text-white font-semibold text-sm">
+                                                    <div className="h-8 w-8 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-sm">
                                                         {user.name?.charAt(0)?.toUpperCase() || 'U'}
                                                     </div>
-                                                    <span className="text-white font-medium">{user.name || 'No Name'}</span>
+                                                    <span className="text-slate-900 dark:text-white font-medium">{user.name || 'No Name'}</span>
                                                 </div>
                                             </td>
-                                            <td className="p-4 text-gray-300">{user.email || 'No Email'}</td>
+                                            <td className="p-4 text-slate-600 dark:text-gray-300">{user.email || 'No Email'}</td>
                                             <td className="p-4">
-                                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize ${user.role === 'admin' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
-                                                    user.role === 'recruiter' ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30' :
-                                                        'bg-green-500/20 text-green-300 border border-green-500/30'
+                                                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize ${user.role === 'admin' ? 'bg-red-500/20 text-red-600 dark:text-red-300 border border-red-500/30' :
+                                                    user.role === 'recruiter' ? 'bg-blue-500/20 text-blue-600 dark:text-blue-300 border border-blue-500/30' :
+                                                        'bg-green-500/20 text-green-600 dark:text-green-300 border border-green-500/30'
                                                     }`}>
                                                     {user.role || 'unknown'}
                                                 </span>
@@ -842,7 +842,7 @@ const AdminDashboard = () => {
                                                 <div className="flex items-center space-x-2">
                                                     <button
                                                         onClick={() => handleViewUserDetails(user)}
-                                                        className="group/btn bg-blue-500/20 hover:bg-blue-500/30 text-blue-300 hover:text-blue-200 px-3 py-2 rounded-lg text-xs font-medium border border-blue-500/30 hover:border-blue-500/50 transition-all duration-200 flex items-center space-x-1"
+                                                        className="group/btn bg-blue-500/20 hover:bg-blue-500/30 text-blue-600 dark:text-blue-300 hover:text-blue-800 dark:hover:text-blue-200 px-3 py-2 rounded-lg text-xs font-medium border border-blue-500/30 hover:border-blue-500/50 transition-all duration-200 flex items-center space-x-1"
                                                     >
                                                         <svg className="h-3 w-3 group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -852,7 +852,7 @@ const AdminDashboard = () => {
                                                     </button>
                                                     <button
                                                         onClick={() => handleDeleteUser(user.id || user._id)}
-                                                        className="group/btn bg-red-500/20 hover:bg-red-500/30 text-red-300 hover:text-red-200 px-3 py-2 rounded-lg text-xs font-medium border border-red-500/30 hover:border-red-500/50 transition-all duration-200 flex items-center space-x-1"
+                                                        className="group/btn bg-red-500/20 hover:bg-red-500/30 text-red-600 dark:text-red-300 hover:text-red-800 dark:hover:text-red-200 px-3 py-2 rounded-lg text-xs font-medium border border-red-500/30 hover:border-red-500/50 transition-all duration-200 flex items-center space-x-1"
                                                     >
                                                         <svg className="h-3 w-3 group-hover/btn:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -862,7 +862,7 @@ const AdminDashboard = () => {
                                                     <select
                                                         value={user.role}
                                                         onChange={(e) => handleChangeUserRole(user.id || user._id, e.target.value)}
-                                                        className="bg-slate-800/50 border border-white/20 px-3 py-2 rounded-lg text-xs text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200"
+                                                        className="bg-slate-100 dark:bg-slate-800/50 border border-slate-200 dark:border-white/20 px-3 py-2 rounded-lg text-xs text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:border-emerald-400 transition-all duration-200"
                                                     >
                                                         <option value="student">Student</option>
                                                         <option value="recruiter">Recruiter</option>
@@ -874,7 +874,7 @@ const AdminDashboard = () => {
                                     ))
                                 ) : (
                                     <tr>
-                                        <td colSpan="4" className="p-8 text-center text-gray-400">
+                                        <td colSpan="4" className="p-8 text-center text-slate-500 dark:text-gray-400">
                                             No users found matching your criteria
                                         </td>
                                     </tr>
