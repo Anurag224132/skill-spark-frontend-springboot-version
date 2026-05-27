@@ -20,6 +20,12 @@ body {
   font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc;
+  transition: background-color 300ms ease;
+}
+
+.dark body {
+  background-color: #050B14;
 }
 
 /* Custom Scrollbar */
