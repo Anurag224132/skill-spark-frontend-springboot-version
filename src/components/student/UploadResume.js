@@ -39,7 +39,8 @@ const UploadResume = ({ onParsed }) => {
       const res = await api.post('/api/resumes', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
+        },
+        timeout: 60000 // 60 seconds (allows for backend parsing + Cloudinary upload + Render cold start)
       });
 
       onParsed(res.data);
