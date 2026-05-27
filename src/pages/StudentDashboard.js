@@ -96,7 +96,7 @@ const StudentDashboard = () => {
             headers: {
               'X-API-Key': process.env.REACT_APP_ML_API_KEY || ''
             },
-            timeout: 2000
+            timeout: 10000
           }
         ).then(res => res.data).catch(err => {
           console.error('ML Ranking failed, using score-only sorting:', err);
