@@ -4,7 +4,6 @@ import api from '../utils/api';
 import LogoutButton from '../components/common/LogoutButton';
 import JobManagement from '../components/admin/JobManagement';
 import AnalyticsCard from '../components/admin/AnalyticsCard';
-import DashboardBackground from '../components/common/DashboardBackground';
 import ThemeToggle from '../components/common/ThemeToggle';
 
 const containerVariants = {
@@ -243,8 +242,6 @@ const AdminDashboard = () => {
 
     return (
         <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8 transition-colors duration-300">
-            <DashboardBackground />
-
             {/* Modal for both User and Job Details */}
             <AnimatePresence>
             {(selectedJob || selectedUser) && (

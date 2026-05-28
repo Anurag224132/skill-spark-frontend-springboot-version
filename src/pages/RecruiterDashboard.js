@@ -9,7 +9,6 @@ import RecruiterAnalytics from '../components/recruiter/RecruiterAnalytics';
 import SkillGapAnalysis from '../components/recruiter/SkillGapAnalysis';
 import LogoutButton from '../components/common/LogoutButton';
 import { useAuth } from '../context/AuthContext';
-import DashboardBackground from '../components/common/DashboardBackground';
 import ThemeToggle from '../components/common/ThemeToggle';
 
 const containerVariants = {
@@ -67,7 +66,6 @@ const RecruiterDashboard = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8 transition-colors duration-300">
-      <DashboardBackground />
       <motion.div 
         variants={containerVariants}
         initial="hidden"
