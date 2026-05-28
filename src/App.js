@@ -6,6 +6,7 @@ import { AnimatePresence } from 'framer-motion';
 import { useLocation } from 'react-router-dom';
 import PageTransition from './components/common/PageTransition';
 import { Toaster } from 'react-hot-toast';
+import DashboardBackground from './components/common/DashboardBackground';
 
 // Lazy load components for code splitting
 const StudentDashboard = lazy(() => import('./pages/StudentDashboard'));
@@ -81,7 +82,8 @@ function App() {
           },
         }}
       />
-      <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#050B14] dark:text-white transition-colors duration-300">
+      <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#050B14] dark:text-white transition-colors duration-300 relative">
+        <DashboardBackground />
 
         <Suspense fallback={<LoadingFallback />}>
           <AnimatePresence mode="wait">

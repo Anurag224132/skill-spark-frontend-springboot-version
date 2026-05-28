@@ -12,7 +12,6 @@ import Pagination from '../components/common/Pagination';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import DashboardBackground from '../components/common/DashboardBackground';
 import ThemeToggle from '../components/common/ThemeToggle';
 
 const containerVariants = {
@@ -254,7 +253,6 @@ const StudentDashboard = () => {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans overflow-hidden selection:bg-cyan-500/30 relative px-4 py-8 transition-colors duration-300">
-      <DashboardBackground />
       <div className="fixed top-6 right-6 z-50 flex items-center gap-4">
         <ThemeToggle />
         <ProfileSection />
