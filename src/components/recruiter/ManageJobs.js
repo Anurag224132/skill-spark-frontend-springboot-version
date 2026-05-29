@@ -13,7 +13,6 @@ const ManageJobs = () => {
   const [totalPages, setTotalPages] = useState(0);
 
   const fetchJobs = async () => {
-    const token = localStorage.getItem('token');
     try {
       const res = await api.get(`/api/jobs/my-jobs?page=${page}&size=10`);
       const data = res.data;
