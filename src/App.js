@@ -83,6 +83,9 @@ function App() {
         }}
       />
       <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#050B14] dark:text-white transition-colors duration-300 relative">
+        {/* Global fixed background is rendered at the top level to stay fixed to the viewport.
+            This avoids nested page containers with transforms/filters (like PageTransition) 
+            breaking its 'position: fixed' layout context. */}
         <DashboardBackground />
 
         <Suspense fallback={<LoadingFallback />}>
