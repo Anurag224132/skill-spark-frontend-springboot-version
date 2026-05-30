@@ -66,6 +66,8 @@ const HomePage = () => {
     return (
         <div className="relative min-h-screen flex flex-col bg-slate-50 dark:bg-[#050B14] text-slate-900 dark:text-white font-sans overflow-hidden selection:bg-cyan-500/30 transition-colors duration-300">
             {/* --- Header Navigation --- */}
+            {/* Header uses 'sticky' instead of 'fixed' to keep it anchored to the top of the viewport
+                under parent containers that have CSS transforms/filters active (which break 'fixed' coordinates). */}
             <header className="sticky top-0 z-50 bg-slate-50/60 dark:bg-[#050B14]/60 backdrop-blur-xl border-b border-slate-200/80 dark:border-white/5 transition-all duration-300">
                 <nav className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
                     <a href="/" className="text-2xl font-black tracking-tight flex items-center gap-2 group">
