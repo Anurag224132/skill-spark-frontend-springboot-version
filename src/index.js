@@ -11,7 +11,7 @@ import { ThemeProvider } from './context/ThemeContext';
 const queryClient = new QueryClient({
   queryCache: new QueryCache({
     onError: (error) => {
-      // If the error has not been toasted by the Axios response interceptor, toast it here
+      // If the error has not been toasted by the Axios response interceptor, toast it here for handling.
       if (!error.globalHandled) {
         const message = error.response?.data?.message || error.message || 'A query error occurred';
         toast.error(message);
