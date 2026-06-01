@@ -41,7 +41,7 @@ const AdminDashboard = () => {
                 api.get('/api/admin/jobs'),
             ]);
 
-            // Handle Spring Boot paginated response or direct list
+            // Handle Spring Boot paginated response or direct list.
             setUsers(Array.isArray(usersRes.data) ? usersRes.data : (usersRes.data?.content || []));
             setJobs(Array.isArray(jobsRes.data) ? jobsRes.data : (jobsRes.data?.content || []));
             setError(null);
