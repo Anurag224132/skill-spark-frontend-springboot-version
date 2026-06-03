@@ -1,5 +1,6 @@
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
+import axios from 'axios';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import PrivateRoute from './components/routes/PrivateRoute';
 import { AnimatePresence } from 'framer-motion';
@@ -52,6 +53,16 @@ const DashboardRouter = () => {
 
 function App() {
   const location = useLocation();
+
+  // Warm up the ML API on app mount to mitigate cold start latency
+  useEffect(() => {
+    if (process.env.REACT_APP_ML_API_URL) {
+      console.log('Pre-warming ML service on app load...');
+      axios.get(process.env.REACT_APP_ML_API_URL, { timeout: 15000 })
+        .then(() => console.log('ML service warmed up successfully.'))
+        .catch(err => console.warn('ML service warmup response:', err.message));
+    }
+  }, []);
 
   return (
     <AuthProvider>
