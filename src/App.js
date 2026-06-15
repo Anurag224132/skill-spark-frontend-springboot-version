@@ -10,6 +10,7 @@ import { Toaster } from 'react-hot-toast';
 import DashboardBackground from './components/common/DashboardBackground';
 
 // Lazy load components for code splitting
+
 const StudentDashboard = lazy(() => import('./pages/StudentDashboard'));
 const RecruiterDashboard = lazy(() => import('./pages/RecruiterDashboard'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
