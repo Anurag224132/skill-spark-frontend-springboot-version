@@ -79,7 +79,7 @@ const AdminDashboard = () => {
                 createdAt: formatDate(data.createdAt),
                 skills: data.skills || [],
 
-                // Student-specific
+                // Student-specific 
                 coursesEnrolled: data.coursesEnrolled ?? 0,
                 jobsApplied: data.jobsApplied ?? 0,
                 jobsRejected: data.jobsRejected ?? 0,
