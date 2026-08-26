@@ -172,6 +172,7 @@ const ViewApplicants = () => {
         if (currentUser?.role === 'recruiter') {
             fetchApplicants();
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentUser, page]);
 
     // Get counts for each status

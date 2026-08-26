@@ -46,6 +46,12 @@ const StudentDashboard = () => {
   const [showResumeViewer, setShowResumeViewer] = useState(false);
   const [resumeUrl, setResumeUrl] = useState(null);
 
+  // Filter and Tab states
+  const [activeTab, setActiveTab] = useState('all'); // 'all', 'unapplied', 'applied'
+  const [matchFilter, setMatchFilter] = useState('all'); // 'all', 'excellent', 'good', 'fair'
+  const [searchQuery, setSearchQuery] = useState('');
+  const [remoteOnly, setRemoteOnly] = useState(false);
+
   // Sync user skills if currentUser changes
   useEffect(() => {
     if (currentUser?.skills?.length > 0) {
@@ -133,7 +139,7 @@ const StudentDashboard = () => {
     enabled: !!(currentUser && currentUser.role?.toLowerCase() === 'student')
   });
 
-  const { jobs = [], totalPages = 0, fitScores = {}, allJobs = [] } = jobsData || {};
+  const { jobs = [], totalPages = 0, fitScores = {} } = jobsData || {};
 
   const {
     data: appliedJobsData,
@@ -154,6 +160,77 @@ const StudentDashboard = () => {
 
   const appliedJobs = useMemo(() => appliedJobsData || [], [appliedJobsData]);
   const appliedJobIds = useMemo(() => new Set(appliedJobs.map(app => app.job?.id || app.job?._id)), [appliedJobs]);
+
+  const mappedAppliedJobs = useMemo(() => {
+    return appliedJobs.map(app => {
+      if (!app.job) return null;
+      let score = app.fitScore ? parseInt(app.fitScore) : null;
+      if (score === null || isNaN(score)) {
+        score = fitScores[app.job.id || app.job._id] || null;
+      }
+      return {
+        ...app.job,
+        applicationStatus: app.status,
+        finalFitScore: score
+      };
+    }).filter(Boolean);
+  }, [appliedJobs, fitScores]);
+
+  const filteredAndSearchedJobs = useMemo(() => {
+    let baseJobs = [];
+    if (activeTab === 'all') {
+      baseJobs = jobs.map(j => {
+        const app = appliedJobs.find(a => (a.job?.id || a.job?._id) === (j.id || j._id));
+        let score = fitScores[j.id || j._id];
+        if (score === undefined || score === null) {
+          score = app?.fitScore ? parseInt(app.fitScore) : null;
+        }
+        return {
+          ...j,
+          applicationStatus: app?.status || null,
+          finalFitScore: score
+        };
+      });
+    } else if (activeTab === 'unapplied') {
+      baseJobs = jobs
+        .filter(job => !appliedJobIds.has(job.id || job._id))
+        .map(j => ({
+          ...j,
+          applicationStatus: null,
+          finalFitScore: fitScores[j.id || j._id] || null
+        }));
+    } else if (activeTab === 'applied') {
+      baseJobs = mappedAppliedJobs;
+    }
+
+    // Filter by search query
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      baseJobs = baseJobs.filter(job => 
+        job.title?.toLowerCase().includes(q) ||
+        job.companyName?.toLowerCase().includes(q) ||
+        job.location?.toLowerCase().includes(q)
+      );
+    }
+
+    // Filter by remote
+    if (remoteOnly) {
+      baseJobs = baseJobs.filter(job => job.remote === true || job.location?.toLowerCase().includes('remote'));
+    }
+
+    // Filter by match score
+    if (matchFilter !== 'all') {
+      baseJobs = baseJobs.filter(job => {
+        const score = job.finalFitScore || 0;
+        if (matchFilter === 'excellent') return score >= 80;
+        if (matchFilter === 'good') return score >= 60 && score < 80;
+        if (matchFilter === 'fair') return score < 60;
+        return true;
+      });
+    }
+
+    return baseJobs;
+  }, [activeTab, jobs, appliedJobIds, mappedAppliedJobs, searchQuery, remoteOnly, matchFilter, fitScores, appliedJobs]);
 
   // Handle resume parse update
   const handleResumeParsed = (parsedData) => {
@@ -484,11 +561,51 @@ const StudentDashboard = () => {
           >
             {/* Recommended Jobs */}
             <div className="bg-white/70 dark:bg-white/10 backdrop-blur-xl border border-slate-200 dark:border-white/20 shadow-xl dark:shadow-2xl hover:border-blue-500/50 hover:shadow-[0_0_30px_rgba(59,130,246,0.15)] transition-all duration-300 p-8 rounded-3xl">
-              <div className="flex items-center space-x-3 mb-6">
-                <span className="text-3xl">💼</span>
-                <h2 id="recommended-jobs-title" className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent">
-                  Recommended Jobs
-                </h2>
+              
+              {/* Tabs and Header */}
+              <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+                <div className="flex items-center space-x-3">
+                  <span className="text-3xl">💼</span>
+                  <h2 id="recommended-jobs-title" className="text-3xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                    Jobs Portal
+                  </h2>
+                </div>
+                
+                {/* Tabs */}
+                {hasUploadedResume && (
+                  <div className="flex bg-slate-100 dark:bg-white/5 p-1 rounded-2xl border border-slate-200/50 dark:border-white/10 shadow-inner">
+                    <button
+                      onClick={() => setActiveTab('all')}
+                      className={`px-5 py-2 rounded-xl text-sm font-bold transition-all duration-200 cursor-pointer ${
+                        activeTab === 'all'
+                          ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-md'
+                          : 'text-slate-655 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      All Recommended
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('unapplied')}
+                      className={`px-5 py-2 rounded-xl text-sm font-bold transition-all duration-200 cursor-pointer ${
+                        activeTab === 'unapplied'
+                          ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-md'
+                          : 'text-slate-655 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      Available
+                    </button>
+                    <button
+                      onClick={() => setActiveTab('applied')}
+                      className={`px-5 py-2 rounded-xl text-sm font-bold transition-all duration-200 cursor-pointer ${
+                        activeTab === 'applied'
+                          ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-white shadow-md'
+                          : 'text-slate-655 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white'
+                      }`}
+                    >
+                      Applied ({appliedJobs.length})
+                    </button>
+                  </div>
+                )}
               </div>
 
               {!hasUploadedResume ? (
@@ -505,52 +622,112 @@ const StudentDashboard = () => {
                     Upload Resume Now
                   </button>
                 </div>
-              ) : loading ? (
-                <div className="flex justify-center items-center py-12 space-x-3">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
-                  <p className="text-slate-700 dark:text-gray-300">Finding perfect matches for you...</p>
-                </div>
-              ) : (jobs.length === 0 && allJobs.length === 0) ? (
-                <div className="text-center py-12">
-                  <div className="text-5xl mb-4">📢</div>
-                  <p className="text-slate-700 dark:text-gray-300">No active jobs available in the system yet.</p>
-                  <p className="text-slate-500 dark:text-gray-400 text-sm mt-2">Check back later or try updating your resume.</p>
-                </div>
-              ) : jobs.length === 0 ? (
-                <div className="text-center py-12">
-                  <div className="text-5xl mb-4">🔍</div>
-                  <p className="text-slate-700 dark:text-gray-300">No jobs matching your specific skills currently.</p>
-                  <p className="text-slate-500 dark:text-gray-400 text-sm mt-2">Try updating your resume with more skills or exploring all jobs.</p>
-                </div>
               ) : (
-                <motion.div 
-                  variants={containerVariants}
-                  initial="hidden"
-                  animate="show"
-                  className="space-y-4"
-                >
-                  {jobs.map((job) => (
-                    <motion.div variants={itemVariants} key={job.id || job._id}>
-                      <JobCard
-                        job={job}
-                        userSkills={userSkills}
-                        onJobClick={handleJobClick}
-                        preCalculatedFitScore={fitScores[job.id || job._id]}
-                        isApplied={appliedJobIds.has(job.id || job._id)}
+                <>
+                  {/* Filter Bar */}
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6 bg-slate-50 dark:bg-white/5 p-4 rounded-2xl border border-slate-200/50 dark:border-white/5 shadow-sm">
+                    {/* Search Input */}
+                    <div className="relative">
+                      <span className="absolute inset-y-0 left-3 flex items-center text-slate-400 dark:text-slate-500 pointer-events-none">🔍</span>
+                      <input
+                        type="text"
+                        placeholder="Search title, company..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-9 pr-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-slate-800 dark:text-white shadow-sm"
                       />
-                    </motion.div>
-                  ))}
+                    </div>
 
-                  <Pagination
-                    currentPage={page}
-                    totalPages={totalPages}
-                    onPageChange={(newPage) => {
-                      setPage(newPage);
-                      // Scroll to top of job list
-                      document.getElementById('recommended-jobs-title')?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                  />
-                </motion.div>
+                    {/* Match Strength Select */}
+                    <div className="relative">
+                      <select
+                        value={matchFilter}
+                        onChange={(e) => setMatchFilter(e.target.value)}
+                        className="w-full pl-4 pr-10 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-white/10 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-slate-800 dark:text-white cursor-pointer shadow-sm select-none"
+                      >
+                        <option value="all">🎯 All Match Levels</option>
+                        <option value="excellent">🔥 Excellent Match (80%+)</option>
+                        <option value="good">⚡ Good Match (60%-79%)</option>
+                        <option value="fair">🌱 Fair Match (&lt;60%)</option>
+                      </select>
+                    </div>
+
+                    {/* Remote Filter Toggle */}
+                    <button
+                      onClick={() => setRemoteOnly(!remoteOnly)}
+                      className={`w-full py-2.5 px-4 rounded-xl text-sm font-bold border transition-all duration-200 cursor-pointer flex items-center justify-center gap-2 shadow-sm ${
+                        remoteOnly
+                          ? 'bg-cyan-500/10 text-cyan-600 dark:text-cyan-400 border-cyan-500/30'
+                          : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-slate-800'
+                      }`}
+                    >
+                      <span>🌐</span> Remote Only
+                      {remoteOnly && <span className="w-1.5 h-1.5 bg-cyan-500 rounded-full animate-ping"></span>}
+                    </button>
+                  </div>
+
+                  {loading ? (
+                    <div className="flex justify-center items-center py-12 space-x-3">
+                      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-emerald-500"></div>
+                      <p className="text-slate-700 dark:text-gray-300">Finding perfect matches for you...</p>
+                    </div>
+                  ) : filteredAndSearchedJobs.length === 0 ? (
+                    <div className="text-center py-12">
+                      <div className="text-5xl mb-4">🔍</div>
+                      <p className="text-slate-700 dark:text-gray-300 font-semibold">No jobs match your criteria.</p>
+                      <p className="text-slate-500 dark:text-gray-400 text-sm mt-2">
+                        {activeTab === 'applied' 
+                          ? "You haven't applied to any jobs that match this filter." 
+                          : activeTab === 'unapplied'
+                            ? "No matching available jobs found."
+                            : "No jobs matching your filters."}
+                      </p>
+                      {(searchQuery || matchFilter !== 'all' || remoteOnly) && (
+                        <button
+                          onClick={() => {
+                            setSearchQuery('');
+                            setMatchFilter('all');
+                            setRemoteOnly(false);
+                          }}
+                          className="mt-4 px-6 py-2 bg-gradient-to-r from-emerald-500 to-cyan-500 text-white font-bold rounded-xl shadow-md hover:opacity-90 transition cursor-pointer"
+                        >
+                          Clear Filters
+                        </button>
+                      )}
+                    </div>
+                  ) : (
+                    <motion.div 
+                      variants={containerVariants}
+                      initial="hidden"
+                      animate="show"
+                      className="space-y-4"
+                    >
+                      {filteredAndSearchedJobs.map((job) => (
+                        <motion.div variants={itemVariants} key={job.id || job._id}>
+                          <JobCard
+                            job={job}
+                            userSkills={userSkills}
+                            onJobClick={handleJobClick}
+                            preCalculatedFitScore={job.finalFitScore}
+                            isApplied={appliedJobIds.has(job.id || job._id)}
+                            applicationStatus={job.applicationStatus}
+                          />
+                        </motion.div>
+                      ))}
+
+                      {activeTab !== 'applied' && (
+                        <Pagination
+                          currentPage={page}
+                          totalPages={totalPages}
+                          onPageChange={(newPage) => {
+                            setPage(newPage);
+                            document.getElementById('recommended-jobs-title')?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                        />
+                      )}
+                    </motion.div>
+                  )}
+                </>
               )}
             </div>
           </motion.div>

@@ -3,7 +3,7 @@ import api from '../../utils/api';
 import { useAuth } from '../../context/AuthContext';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore, isApplied = false }) => {
+const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore, isApplied = false, applicationStatus = null }) => {
 
   const { currentUser } = useAuth();
   const [fitScore, setFitScore] = useState(null);
@@ -114,9 +114,22 @@ const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore, isAp
         <div className="flex flex-col sm:flex-row justify-between gap-4">
           {/* Basic Job Info */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent truncate">
-              {job.title}
-            </h3>
+            <div className="flex items-center gap-2 flex-wrap">
+              <h3 className="text-xl font-bold bg-gradient-to-r from-emerald-600 to-cyan-600 dark:from-emerald-400 dark:to-cyan-400 bg-clip-text text-transparent truncate">
+                {job.title}
+              </h3>
+              {applied && (
+                <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full uppercase tracking-wider ${
+                  applicationStatus === 'approved'
+                    ? 'bg-green-500/10 text-green-600 dark:text-green-400 border border-green-500/20'
+                    : applicationStatus === 'rejected'
+                      ? 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20'
+                      : 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20'
+                }`}>
+                  {applicationStatus ? applicationStatus : 'Applied'}
+                </span>
+              )}
+            </div>
             <div className="flex items-center space-x-4 text-slate-500 dark:text-gray-300 text-sm mt-1">
               {job.companyName && (
                 <div className="flex items-center space-x-1 truncate font-medium">
@@ -283,7 +296,7 @@ const JobCard = ({ job, userSkills = [], onJobClick, preCalculatedFitScore, isAp
                       : 'bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-600 hover:to-cyan-600 text-white hover:opacity-90 shadow-cyan-500/25'
                   }`}
               >
-                {applied ? '✅ Applied' : applying ? 'Applying...' : '🚀 Apply Now'}
+                {applied ? (applicationStatus ? `✅ Applied (${applicationStatus.toUpperCase()})` : '✅ Applied') : applying ? 'Applying...' : '🚀 Apply Now'}
               </button>
             </div>
             </motion.div>
